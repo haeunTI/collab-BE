@@ -7,8 +7,6 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
-
 <h1>Form input variable names</h1>
 <h3>A. Login input</h3>
 - email (text/email) <br>
