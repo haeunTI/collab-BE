@@ -12,10 +12,10 @@
 <h1>Form input variable names<h1>
 
 <h3>A. Login input</h3>
-- email (text/email)
+- email (text/email) <br>
 - password (password)
 
 
 <h3>B. About Us input</h3>
-- image (file)
+- image (file) <br>
 - description (text)
