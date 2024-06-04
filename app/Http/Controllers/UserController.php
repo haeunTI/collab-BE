@@ -19,7 +19,6 @@ class UserController extends Controller
             if ($user instanceof User) {
                 $tokenResult = $user->createToken('Token');
                 $token = $tokenResult->accessToken;
-                // return response(['test' => "what"]);
 
                 $response = [   
                     'token' => $token,
@@ -30,11 +29,6 @@ class UserController extends Controller
             } else {
                 return response(['message' => 'Invalid user type'], 422);
             }
-
-            // $token = $user->createToken('Token')->accessToken; 
-            // $response = ['token' => $token, 'user' => $user];
-            
-            // return response($response, 200);
 
 
         } else {
