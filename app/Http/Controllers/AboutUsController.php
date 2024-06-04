@@ -53,7 +53,7 @@ class AboutUsController extends Controller
               $img->resize(370, 370);
               $image = $req->image;
               $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-              $img->toJpeg()->save(base_path('public/img/about-us/'.$name_generator));
+              $img->toJpeg()->save(public_path('img/about-us/' . $name_generator));
             } 
   
              $aboutUs = AboutUs::create([
