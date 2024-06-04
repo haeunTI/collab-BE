@@ -34,6 +34,7 @@ class UserController extends Controller
             $response = ["message" => 'Invalid email or password'];
             return response($response, 422);
         }
+        
     }
 
     public function get() {
