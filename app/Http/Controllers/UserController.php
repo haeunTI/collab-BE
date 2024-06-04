@@ -16,21 +16,21 @@ class UserController extends Controller
         if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
             $user = Auth::user();
             
-            // if ($user instanceof User) {
-            //     $tokenResult = $user->createToken('Personal Access Token');
-            //     $token = $tokenResult->accessToken;
+            if ($user instanceof User) {
+                return response(['test' => "what"]);
+                $tokenResult = $user->createToken('Personal Access Token');
+                $token = $tokenResult->accessToken;
 
-            //     $response = [
-            //         'token' => $token,
-            //         'user' => $user
-            //     ];
+                $response = [
+                    'token' => $token,
+                    'user' => $user
+                ];
 
-            //     return response($response, 200);
-            // } else {
-            //     return response(['message' => 'Invalid user type'], 422);
-            // }
+                return response($response, 200);
+            } else {
+                return response(['message' => 'Invalid user type'], 422);
+            }
 
-            return response(['test' => "hellloo"]);
 
         } else {
             $response = ["message" => 'Invalid email or password'];
