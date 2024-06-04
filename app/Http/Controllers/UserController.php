@@ -17,13 +17,11 @@ class UserController extends Controller
             $user = Auth::user();
             
             if ($user instanceof User) {
-                $tokenResult = $user->createToken('Personal Access Token');
-                return response(['test' => "what"]);
-
+                $tokenResult = $user->createToken('Token');
                 $token = $tokenResult->accessToken;
                 // return response(['test' => "what"]);
 
-                $response = [
+                $response = [   
                     'token' => $token,
                     'user' => $user
                 ];
