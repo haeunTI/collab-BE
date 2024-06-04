@@ -31,6 +31,11 @@ class UserController extends Controller
                 return response(['message' => 'Invalid user type'], 422);
             }
 
+            // $token = $user->createToken('Token')->accessToken; 
+            // $response = ['token' => $token, 'user' => $user];
+            
+            // return response($response, 200);
+
 
         } else {
             $response = ["message" => 'Invalid email or password'];
