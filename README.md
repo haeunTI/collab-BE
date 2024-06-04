@@ -12,7 +12,29 @@
 - email (text/email) <br>
 - password (password)
 
-
 <h3>B. About Us input</h3>
 - image (file) <br>
 - description (text)
+
+<h3>C. Contact Us input</h3>
+- name (text) <br>
+- email (text) <br>
+- phone (text) <br>
+- address (text) <br>
+- message (text) <br>
+
+<h3>D. Social Media fetch data</h3>
+- name (text) <br>
+- url (text) <br>
+- image (file) <br>
+
+<h3>E. Testimony input</h3>
+- name (text) <br>
+- description (text)<br>
+- image (file) <br>
+- business_name (text) <br>
+
+<h3>F. Banner input</h3>
+- image (file) <br>
+- description (text)
+
