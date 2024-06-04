@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\TestimonyController;
@@ -51,6 +52,16 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/testimony/{id}', [TestimonyController::class, 'update']);
     Route::patch('/testimony/{id}', [TestimonyController::class, 'update']);
     Route::delete('/testimony/{id}', [TestimonyController::class, 'destroy']);
+
+    //banner
+    Route::get('/banner', [BannerController::class, 'index']);
+    Route::post('/banner', [BannerController::class, 'store']);
+    Route::get('/banner/{id}', [BannerController::class, 'show']);
+
+    
+    Route::post('/banner/{id}', [BannerController::class, 'update']);
+    Route::patch('/banner/{id}', [BannerController::class, 'update']);
+    Route::delete('/banner/{id}', [BannerController::class, 'destroy']);
 
 
 });
