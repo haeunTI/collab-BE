@@ -11,7 +11,7 @@ class StoreSocialMediaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StoreSocialMediaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required',
+            'url' => 'required',
+            'image' => 'required'
         ];
     }
 }

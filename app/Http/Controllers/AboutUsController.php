@@ -56,7 +56,7 @@ class AboutUsController extends Controller
               $img->toJpeg()->save(base_path('public/img/about-us/'.$name_generator));
             } 
   
-             $blog = AboutUs::create([
+             $aboutUs = AboutUs::create([
                  "image" => $name_generator,
                  "description" => $req->description,
                  "created_at" => Carbon::now(),
@@ -65,13 +65,13 @@ class AboutUsController extends Controller
              return response([
                  "status" => true,
                  "message" => "success post about us",
-                 "data" => $blog
+                 "data" => $aboutUs
              ]);
   
          } catch (\Throwable $th) {
              return response([
                  "status" => false,
-                 "message" => "fail post blog",
+                 "message" => "fail post about us",
                  "error" => $th->getMessage()
              ]);
          }
@@ -132,14 +132,14 @@ class AboutUsController extends Controller
 
             return response([
                 "status" => true,  
-                "message" => "success update blog",
+                "message" => "success update about us",
                 "data" => $aboutUs
             ]);
 
         } catch (\Throwable $th) {
             return response([
                 "status" => false,
-                "message" => "fail update blog",
+                "message" => "fail update about us",
                 "error" => $th->getMessage()
             ]);
         }
