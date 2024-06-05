@@ -82,7 +82,7 @@ class SocialMediaController extends Controller
 
                     return response([
                         "status" => true,
-                        "message" => "success post about us",
+                        "message" => "success post social media",
                         "data" => $socialMedia
                     ]);
                  } else {

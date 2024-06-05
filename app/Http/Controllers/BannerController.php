@@ -6,11 +6,51 @@ use App\Models\Banner;
 use App\Http\Requests\StoreBannerRequest;
 use App\Http\Requests\UpdateBannerRequest;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
 class BannerController extends Controller
 {
+    private function token() {
+        $client_id = \Config('services.google.client_id');
+        $client_secret = \Config('services.google.client_secret');
+        $refresh_token = \Config('services.google.refresh_token');
+        $response= Http::post('https://oauth2.googleapis.com/token', [
+            'client_id' => $client_id,
+            'client_secret' => $client_secret,
+            'refresh_token' => $refresh_token,
+            'grant_type' => 'refresh_token',
+        ]);
+
+        $accessToken = json_decode((string)$response->getBody(), true)['access_token'];
+        return $accessToken;
+
+    }
+
+    private function deleteOldImageFromDrive($filename, $accessToken) {
+        $fileIdResponse = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get('https://www.googleapis.com/drive/v3/files', [
+            'q' => "name='$filename' and trashed=false",
+            'fields' => 'files(id, name)',
+        ]);
+
+        if ($fileIdResponse->successful()) {
+            $files = json_decode($fileIdResponse->body(), true)['files'];
+            if (!empty($files)) {
+                $fileId = $files[0]['id'];
+
+                $deleteResponse = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ])->delete("https://www.googleapis.com/drive/v3/files/$fileId");
+
+                return $deleteResponse->successful();
+            }
+        }
+
+        return false;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -34,40 +74,48 @@ class BannerController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreBannerRequest $req)
     {
         try{
             if($req->has('image')){
-              $manager = new ImageManager(new Driver());
-              $img = $manager->read($req->file('image'));
-              $img->resize(370, 370);
-              $image = $req->image;
-              $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-              $img->toJpeg()->save(base_path('public/img/banner/'.$name_generator));
+                $accessToken = $this->token();
+
+                $file = $req->file('image');
+                $name_generator = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ])->attach(
+                    'metadata', json_encode([
+                        'name' => $name_generator,
+                        'parents' => [\Config('services.google.banner_folder_id')],
+                    ]), 'metadata.json'
+                )->attach(
+                    'file', fopen($file->getPathname(), 'r'), $name_generator
+                )->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+                
+                 if($response->successful()) {
+                    $banner = Banner::create([
+                        "image" => $name_generator,
+                        "description" => $req->description,
+                        "created_at" => Carbon::now(),
+                    ]);
+
+                    return response([
+                        "status" => true,
+                        "message" => "success post banner",
+                        "data" => $banner
+                    ]);
+                 }  else {
+                    return response([
+                        "access" => $accessToken,
+                        "response_body" => $response->body(),
+                        "response_status" => $response->status(),
+                    ]);
+                }
             } 
-  
-             $banner = Banner::create([
-                 "image" => $name_generator,
-                 "description" => $req->description,
-                 "created_at" => Carbon::now(),
-             ]); 
-  
-             return response([
-                 "status" => true,
-                 "message" => "success post banner",
-                 "data" => $banner
-             ]);
-  
          } catch (\Throwable $th) {
              return response([
                  "status" => false,
@@ -115,13 +163,38 @@ class BannerController extends Controller
         try {
             $banner = Banner::findOrFail($id);
 
-            if($req->has('image')){
-                $manager = new ImageManager(new Driver());
-                $img = $manager->read($req->file('image'));
-                $img->resize(370, 370);
-                $image = $req->image;
-                $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-                $img->toJpeg()->save(base_path('public/img/banner/'.$name_generator));
+            $name_generator = $banner->image;
+
+            if($req->hasFile('image')){
+                $accessToken = $this->token();
+
+                $file = $req->file('image');
+                $name_generator = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ])->attach(
+                    'metadata', json_encode([
+                        'name' => $name_generator,
+                        'parents' => [\Config('services.google.banner_folder_id')],
+                    ]), 'metadata.json'
+                )->attach(
+                    'file', fopen($file->getPathname(), 'r'), $name_generator
+                )->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+
+                if (!$response->successful()) {
+                    return response([
+                        "status" => false,
+                        "message" => "fail update about us",
+                        "response_body" => $response->body(),
+                        "response_status" => $response->status(),
+                        "access" => $accessToken
+                    ]);
+                }
+
+                if ($banner->image) {
+                    $this->deleteOldImageFromDrive($banner->image, $accessToken);
+                }
             } 
 
             $banner->update([
@@ -151,12 +224,48 @@ class BannerController extends Controller
     public function destroy($id)
     {
         try{
-            Banner::findOrFail($id)->delete(); 
+            $banner = Banner::findOrFail($id)->delete(); 
+            $imageName = $banner->image;
  
-            return response([
-                "status" => true,
-                "message" => "success delete banner",
-            ]);
+            if ($imageName) {
+                $accessToken = $this->token();
+
+                $fileIdResponse = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ])->get('https://www.googleapis.com/drive/v3/files', [
+                    'q' => "name='$imageName' and trashed=false",
+                    'fields' => 'files(id, name)',
+                ]);
+
+                if ($fileIdResponse->successful()) {
+                    $files = json_decode($fileIdResponse->body(), true)['files'];
+                    if (!empty($files)) {
+                        $fileId = $files[0]['id'];
+
+                        $deleteResponse = Http::withHeaders([
+                            'Authorization' => 'Bearer ' . $accessToken,
+                        ])->delete("https://www.googleapis.com/drive/v3/files/$fileId");
+
+                        if (!$deleteResponse->successful()) {
+                            return response([
+                                "status" => false,
+                                "message" => "fail delete image from Google Drive",
+                                "response_body" => $deleteResponse->body(),
+                                "response_status" => $deleteResponse->status(),
+                            ]);
+                        }
+                    }
+                } else {
+                    return response([
+                        "status" => false,
+                        "message" => "fail fetch file ID from Google Drive",
+                        "response_body" => $fileIdResponse->body(),
+                        "response_status" => $fileIdResponse->status(),
+                    ]);
+                }
+            }
+
+            $banner->delete();
  
         } catch (\Throwable $th) {
             return response([
