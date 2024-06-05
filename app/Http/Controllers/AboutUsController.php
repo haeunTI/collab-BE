@@ -77,7 +77,7 @@ class AboutUsController extends Controller
                 $mimeType = $image->getClientMimeType();
                 // $img->toJpeg()->save(public_path('img/about-us/' . $name_generator));
 
-                Http::withHeaders([
+                $testing = Http::withHeaders([
                     'Authorization' => 'Bearer'.$accessToken,
                     'Content-Type' => 'Application/json',
                 ])->post('https://www.googleapis.com/drive/v3/files',[
@@ -87,19 +87,28 @@ class AboutUsController extends Controller
                         'parents' => [\Config('services.google.folder_id')]
                 ]
                 );
+
+                if($testing->successful()) {
+                    $aboutUs = AboutUs::create([
+                        "image" => $name_generator,
+                        "description" => $req->description,
+                        "created_at" => Carbon::now(),
+                    ]); 
+         
+                    return response([
+                        "status" => true,
+                        "message" => "success post about us",
+                        "data" => $aboutUs
+                    ]);
+                } else {
+                    return response([
+                        "access" => $accessToken,
+                        "testing" => $testing
+                    ]);
+                }
             } 
   
-             $aboutUs = AboutUs::create([
-                 "image" => $name_generator,
-                 "description" => $req->description,
-                 "created_at" => Carbon::now(),
-             ]); 
-  
-             return response([
-                 "status" => true,
-                 "message" => "success post about us",
-                 "data" => $aboutUs
-             ]);
+             
   
          } catch (\Throwable $th) {
              return response([
