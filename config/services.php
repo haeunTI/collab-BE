@@ -41,6 +41,7 @@ return [
         'refresh_token' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
         'folder_id' => env('GOOGLE_DRIVE_FOLDER_ID'),
         'about_us_folder_id' => env('GOOGLE_DRIVE_ABOUT_US_FOLDER_ID'),
+        'social_media_folder_id' => env('GOOGLE_DRIVE_SOCIAL_MEDIA_FOLDER_ID'),
     ]
 
 ];
