@@ -69,13 +69,39 @@ class AboutUsController extends Controller
             if($req->has('image')){
                 $accessToken = $this->token();
 
+                // $testing = Http::withHeaders([
+                //     'Authorization' => 'Bearer ' . $accessToken,
+                //     'Content-Type' => 'multipart/related; boundary=foo_bar_baz'
+                // ])->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', [
+                //     'multipart' => [
+                //         [
+                //             'name' => 'metadata',
+                //             'contents' => json_encode([
+                //                 'name' => $name_generator,
+                //                 'parents' => [\Config('services.google.folder_id')],
+                //             ]),
+                //             'headers' => [
+                //                 'Content-Type' => 'application/json; charset=UTF-8',
+                //             ],
+                //         ],
+                //         [
+                //             'name' => 'file',
+                //             'contents' => ,
+                //             'headers' => [
+                //                 'Content-Type' => $mimeType,
+                //             ],
+                //         ],
+                //     ],
+                // ]);
+
                 $manager = new ImageManager(new Driver());
                 $img = $manager->read($req->file('image'));
                 $img->resize(370, 370);
                 $image = $req->image;
                 $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
                 $mimeType = $image->getClientMimeType();
-                // $img->toJpeg()->save(public_path('img/about-us/' . $name_generator));
+                $file = $req->file('image');
+                $fileData = file_get_contents($file->getPathname());
 
                 // $testing = Http::withHeaders([
                 //     'Authorization' => 'Bearer '.$accessToken,
@@ -88,32 +114,32 @@ class AboutUsController extends Controller
                 // ]
                 // );
 
-                $fileData = file_get_contents(public_path('img/about-us/' . $name_generator));
+                $multipart = [
+                    [
+                        'name' => 'metadata',
+                        'contents' => json_encode([
+                            'name' => $name_generator,
+                            'parents' => [\Config('services.google.folder_id')],
+                        ]),
+                        'headers' => [
+                            'Content-Type' => 'application/json; charset=UTF-8',
+                        ],
+                    ],
+                    [
+                        'name' => 'file',
+                        'contents' => $fileData,
+                        'headers' => [
+                            'Content-Type' => $mimeType,
+                        ],
+                    ],
+                ];
 
                 $testing = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $accessToken,
-                    'Content-Type' => 'multipart/related; boundary=foo_bar_baz'
-                ])->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', [
-                    'multipart' => [
-                        [
-                            'name' => 'metadata',
-                            'contents' => json_encode([
-                                'name' => $name_generator,
-                                'parents' => [\Config('services.google.folder_id')],
-                            ]),
-                            'headers' => [
-                                'Content-Type' => 'application/json; charset=UTF-8',
-                            ],
-                        ],
-                        [
-                            'name' => 'file',
-                            'contents' => $fileData,
-                            'headers' => [
-                                'Content-Type' => $mimeType,
-                            ],
-                        ],
-                    ],
-                ]);
+                    'Content-Type' => 'multipart/related',
+                ])->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', $multipart);
+
+            
                 if($testing->successful()) {
                     $aboutUs = AboutUs::create([
                         "image" => $name_generator,
