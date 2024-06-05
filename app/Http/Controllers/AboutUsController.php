@@ -67,8 +67,6 @@ class AboutUsController extends Controller
     {
         try{
             if($req->has('image')){
-                $accessToken = $this->token();
-
                 // $testing = Http::withHeaders([
                 //     'Authorization' => 'Bearer ' . $accessToken,
                 //     'Content-Type' => 'multipart/related; boundary=foo_bar_baz'
@@ -94,15 +92,6 @@ class AboutUsController extends Controller
                 //     ],
                 // ]);
 
-                $manager = new ImageManager(new Driver());
-                $img = $manager->read($req->file('image'));
-                $img->resize(370, 370);
-                $image = $req->image;
-                $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-                $mimeType = $image->getClientMimeType();
-                $file = $req->file('image');
-                $fileData = file_get_contents($file->getPathname());
-
                 // $testing = Http::withHeaders([
                 //     'Authorization' => 'Bearer '.$accessToken,
                 //     'Content-Type' => 'Application/json',
@@ -113,6 +102,12 @@ class AboutUsController extends Controller
                 //         'parents' => [\Config('services.google.folder_id')]
                 // ]
                 // );
+
+                $accessToken = $this->token();
+
+                $file = $req->file('image');
+                $name_generator = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+                $mimeType = $file->getClientMimeType();
 
                 $multipart = [
                     [
@@ -127,7 +122,8 @@ class AboutUsController extends Controller
                     ],
                     [
                         'name' => 'file',
-                        'contents' => $fileData,
+                        'contents' => fopen($file->getPathname(), 'r'),
+                        'filename' => $name_generator,
                         'headers' => [
                             'Content-Type' => $mimeType,
                         ],
