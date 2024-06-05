@@ -67,30 +67,7 @@ class AboutUsController extends Controller
     {
         try{
             if($req->has('image')){
-                // $testing = Http::withHeaders([
-                //     'Authorization' => 'Bearer ' . $accessToken,
-                //     'Content-Type' => 'multipart/related; boundary=foo_bar_baz'
-                // ])->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', [
-                //     'multipart' => [
-                //         [
-                //             'name' => 'metadata',
-                //             'contents' => json_encode([
-                //                 'name' => $name_generator,
-                //                 'parents' => [\Config('services.google.folder_id')],
-                //             ]),
-                //             'headers' => [
-                //                 'Content-Type' => 'application/json; charset=UTF-8',
-                //             ],
-                //         ],
-                //         [
-                //             'name' => 'file',
-                //             'contents' => ,
-                //             'headers' => [
-                //                 'Content-Type' => $mimeType,
-                //             ],
-                //         ],
-                //     ],
-                // ]);
+                
 
                 // $testing = Http::withHeaders([
                 //     'Authorization' => 'Bearer '.$accessToken,
@@ -124,40 +101,42 @@ class AboutUsController extends Controller
                         'name' => 'file',
                         'contents' => fopen($file->getPathname(), 'r'),
                         'filename' => $name_generator,
-                        'headers' => [
-                            'Content-Type' => $mimeType,
-                        ],
                     ],
                 ];
 
-                $testing = Http::withHeaders([
+                $response = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $accessToken,
-                    'Content-Type' => 'multipart/related',
-                ])->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', $multipart);
+                ])->attach(
+                    'metadata', json_encode([
+                        'name' => $name_generator,
+                        'parents' => [\Config('services.google.folder_id')],
+                    ]), 'metadata.json'
+                )->attach(
+                    'file', fopen($file->getPathname(), 'r'), $name_generator
+                )->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
 
-            
-                if($testing->successful()) {
+                // Check the response
+                
+                 if($response->successful()) {
                     $aboutUs = AboutUs::create([
                         "image" => $name_generator,
                         "description" => $req->description,
                         "created_at" => Carbon::now(),
-                    ]); 
-         
+                    ]);
+
                     return response([
                         "status" => true,
                         "message" => "success post about us",
                         "data" => $aboutUs
                     ]);
-                } else {
+                 } else {
                     return response([
                         "access" => $accessToken,
-                        "response_body" => $testing->body(),
-                        "response_status" => $testing->status(),
+                        "response_body" => $response->body(),
+                        "response_status" => $response->status(),
                     ]);
                 }
             } 
-  
-             
   
          } catch (\Throwable $th) {
              return response([
