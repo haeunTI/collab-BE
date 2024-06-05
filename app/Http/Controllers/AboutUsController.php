@@ -203,7 +203,7 @@ class AboutUsController extends Controller
                 ])->attach(
                     'metadata', json_encode([
                         'name' => $name_generator,
-                        'parents' => [\Config('services.google.folder_id')],
+                        'parents' => [\Config('services.google.about_us_folder_id')],
                     ]), 'metadata.json'
                 )->attach(
                     'file', fopen($file->getPathname(), 'r'), $name_generator
