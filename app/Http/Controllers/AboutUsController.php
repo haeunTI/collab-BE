@@ -78,7 +78,7 @@ class AboutUsController extends Controller
                 // $img->toJpeg()->save(public_path('img/about-us/' . $name_generator));
 
                 $testing = Http::withHeaders([
-                    'Authorization' => 'Bearer'.$accessToken,
+                    'Authorization' => 'Bearer '.$accessToken,
                     'Content-Type' => 'Application/json',
                 ])->post('https://www.googleapis.com/drive/v3/files',[
                         'data' => $name_generator,
@@ -103,7 +103,8 @@ class AboutUsController extends Controller
                 } else {
                     return response([
                         "access" => $accessToken,
-                        "testing" => $testing
+                        "response_body" => $testing->body(),
+                        "response_status" => $testing->status(),
                     ]);
                 }
             } 
