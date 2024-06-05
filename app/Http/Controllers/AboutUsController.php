@@ -75,7 +75,7 @@ class AboutUsController extends Controller
                 $image = $req->image;
                 $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
                 $mimeType = $image->getClientMimeType();
-                $img->toJpeg()->save(public_path('img/about-us/' . $name_generator));
+                // $img->toJpeg()->save(public_path('img/about-us/' . $name_generator));
 
                 Http::withHeaders([
                     'Authorization' => 'Bearer'.$accessToken,
