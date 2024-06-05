@@ -36,7 +36,6 @@ class AboutUsController extends Controller
     {
         try{
             $aboutUs = AboutUs::all(); 
-            // $testing = $this->token();
  
             return response([
                 "status" => true,
@@ -68,12 +67,26 @@ class AboutUsController extends Controller
     {
         try{
             if($req->has('image')){
-              $manager = new ImageManager(new Driver());
-              $img = $manager->read($req->file('image'));
-              $img->resize(370, 370);
-              $image = $req->image;
-              $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-              $img->toJpeg()->save(public_path('img/about-us/' . $name_generator));
+                $accessToken = $this->token();
+
+                $manager = new ImageManager(new Driver());
+                $img = $manager->read($req->file('image'));
+                $img->resize(370, 370);
+                $image = $req->image;
+                $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
+                $mimeType = $image->getClientMimeType();
+                $img->toJpeg()->save(public_path('img/about-us/' . $name_generator));
+
+                Http::withHeaders([
+                    'Authorization' => 'Bearer'.$accessToken,
+                    'Content-Type' => 'Application/json',
+                ])->post('https://www.googleapis.com/drive/v3/files',[
+                        'data' => $name_generator,
+                        'mimeType' => $mimeType,
+                        'uploadType' => 'resumable',
+                        'parents' => [\Config('services.google.folder_id')]
+                ]
+                );
             } 
   
              $aboutUs = AboutUs::create([
