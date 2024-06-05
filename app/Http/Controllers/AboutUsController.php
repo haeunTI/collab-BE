@@ -91,18 +91,6 @@ class AboutUsController extends Controller
     {
         try{
             if($req->has('image')){
-                
-
-                // $testing = Http::withHeaders([
-                //     'Authorization' => 'Bearer '.$accessToken,
-                //     'Content-Type' => 'Application/json',
-                // ])->post('https://www.googleapis.com/drive/v3/files',[
-                //         'data' => $name_generator,
-                //         'mimeType' => $mimeType,
-                //         'uploadType' => 'resumable',
-                //         'parents' => [\Config('services.google.folder_id')]
-                // ]
-                // );
 
                 $accessToken = $this->token();
 
@@ -119,8 +107,6 @@ class AboutUsController extends Controller
                 )->attach(
                     'file', fopen($file->getPathname(), 'r'), $name_generator
                 )->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
-
-                // Check the response
                 
                  if($response->successful()) {
                     $aboutUs = AboutUs::create([
