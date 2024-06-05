@@ -32,6 +32,30 @@ class AboutUsController extends Controller
 
     }
 
+    private function deleteOldImageFromDrive($filename, $accessToken) {
+        $fileIdResponse = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get('https://www.googleapis.com/drive/v3/files', [
+            'q' => "name='$filename' and trashed=false",
+            'fields' => 'files(id, name)',
+        ]);
+
+        if ($fileIdResponse->successful()) {
+            $files = json_decode($fileIdResponse->body(), true)['files'];
+            if (!empty($files)) {
+                $fileId = $files[0]['id'];
+
+                $deleteResponse = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ])->delete("https://www.googleapis.com/drive/v3/files/$fileId");
+
+                return $deleteResponse->successful();
+            }
+        }
+
+        return false;
+    }
+
     public function index()
     {
         try{
@@ -166,14 +190,39 @@ class AboutUsController extends Controller
         try {
             $aboutUs = AboutUs::findOrFail($id);
 
-            if($req->has('image')){
-                $manager = new ImageManager(new Driver());
-                $img = $manager->read($req->file('image'));
-                $img->resize(370, 370);
-                $image = $req->image;
-                $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-                $img->toJpeg()->save(base_path('public/img/about-us/'.$name_generator));
-            } 
+            $name_generator = $aboutUs->image; // Keep the current image name if no new image is uploaded
+
+            if ($req->hasFile('image')) {
+                $accessToken = $this->token();
+
+                $file = $req->file('image');
+                $name_generator = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ])->attach(
+                    'metadata', json_encode([
+                        'name' => $name_generator,
+                        'parents' => [\Config('services.google.folder_id')],
+                    ]), 'metadata.json'
+                )->attach(
+                    'file', fopen($file->getPathname(), 'r'), $name_generator
+                )->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+
+                if (!$response->successful()) {
+                    return response([
+                        "status" => false,
+                        "message" => "fail update about us",
+                        "response_body" => $response->body(),
+                        "response_status" => $response->status(),
+                        "access" => $accessToken
+                    ]);
+                }
+
+                if ($aboutUs->image) {
+                    $this->deleteOldImageFromDrive($aboutUs->image, $accessToken);
+                }
+            }
 
             $aboutUs->update([
                 'image' => $name_generator,
@@ -182,7 +231,7 @@ class AboutUsController extends Controller
             ]);
 
             return response([
-                "status" => true,  
+                "status" => true,
                 "message" => "success update about us",
                 "data" => $aboutUs
             ]);
