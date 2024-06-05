@@ -77,17 +77,43 @@ class AboutUsController extends Controller
                 $mimeType = $image->getClientMimeType();
                 // $img->toJpeg()->save(public_path('img/about-us/' . $name_generator));
 
-                $testing = Http::withHeaders([
-                    'Authorization' => 'Bearer '.$accessToken,
-                    'Content-Type' => 'Application/json',
-                ])->post('https://www.googleapis.com/drive/v3/files',[
-                        'data' => $name_generator,
-                        'mimeType' => $mimeType,
-                        'uploadType' => 'resumable',
-                        'parents' => [\Config('services.google.folder_id')]
-                ]
-                );
+                // $testing = Http::withHeaders([
+                //     'Authorization' => 'Bearer '.$accessToken,
+                //     'Content-Type' => 'Application/json',
+                // ])->post('https://www.googleapis.com/drive/v3/files',[
+                //         'data' => $name_generator,
+                //         'mimeType' => $mimeType,
+                //         'uploadType' => 'resumable',
+                //         'parents' => [\Config('services.google.folder_id')]
+                // ]
+                // );
 
+                $fileData = file_get_contents(public_path('img/about-us/' . $name_generator));
+
+                $testing = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                    'Content-Type' => 'multipart/related; boundary=foo_bar_baz'
+                ])->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', [
+                    'multipart' => [
+                        [
+                            'name' => 'metadata',
+                            'contents' => json_encode([
+                                'name' => $name_generator,
+                                'parents' => [\Config('services.google.folder_id')],
+                            ]),
+                            'headers' => [
+                                'Content-Type' => 'application/json; charset=UTF-8',
+                            ],
+                        ],
+                        [
+                            'name' => 'file',
+                            'contents' => $fileData,
+                            'headers' => [
+                                'Content-Type' => $mimeType,
+                            ],
+                        ],
+                    ],
+                ]);
                 if($testing->successful()) {
                     $aboutUs = AboutUs::create([
                         "image" => $name_generator,
