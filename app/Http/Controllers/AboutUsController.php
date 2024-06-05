@@ -84,32 +84,13 @@ class AboutUsController extends Controller
 
                 $file = $req->file('image');
                 $name_generator = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
-                $mimeType = $file->getClientMimeType();
-
-                $multipart = [
-                    [
-                        'name' => 'metadata',
-                        'contents' => json_encode([
-                            'name' => $name_generator,
-                            'parents' => [\Config('services.google.folder_id')],
-                        ]),
-                        'headers' => [
-                            'Content-Type' => 'application/json; charset=UTF-8',
-                        ],
-                    ],
-                    [
-                        'name' => 'file',
-                        'contents' => fopen($file->getPathname(), 'r'),
-                        'filename' => $name_generator,
-                    ],
-                ];
 
                 $response = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $accessToken,
                 ])->attach(
                     'metadata', json_encode([
                         'name' => $name_generator,
-                        'parents' => [\Config('services.google.folder_id')],
+                        'parents' => [\Config('services.google.about_us_folder_id')],
                     ]), 'metadata.json'
                 )->attach(
                     'file', fopen($file->getPathname(), 'r'), $name_generator
