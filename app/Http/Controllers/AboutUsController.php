@@ -236,61 +236,61 @@ class AboutUsController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $aboutUs = AboutUs::findOrFail($id);
-            $imageName = $aboutUs->image;
+            try {
+                $aboutUs = AboutUs::findOrFail($id);
+                $imageName = $aboutUs->image;
 
-            if ($imageName) {
-                $accessToken = $this->token();
+                if ($imageName) {
+                    $accessToken = $this->token();
 
-                $fileIdResponse = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $accessToken,
-                ])->get('https://www.googleapis.com/drive/v3/files', [
-                    'q' => "name='$imageName' and trashed=false",
-                    'fields' => 'files(id, name)',
+                    $fileIdResponse = Http::withHeaders([
+                        'Authorization' => 'Bearer ' . $accessToken,
+                    ])->get('https://www.googleapis.com/drive/v3/files', [
+                        'q' => "name='$imageName' and trashed=false",
+                        'fields' => 'files(id, name)',
+                    ]);
+
+                    if ($fileIdResponse->successful()) {
+                        $files = json_decode($fileIdResponse->body(), true)['files'];
+                        if (!empty($files)) {
+                            $fileId = $files[0]['id'];
+
+                            $deleteResponse = Http::withHeaders([
+                                'Authorization' => 'Bearer ' . $accessToken,
+                            ])->delete("https://www.googleapis.com/drive/v3/files/$fileId");
+
+                            if (!$deleteResponse->successful()) {
+                                return response([
+                                    "status" => false,
+                                    "message" => "fail delete image from Google Drive",
+                                    "response_body" => $deleteResponse->body(),
+                                    "response_status" => $deleteResponse->status(),
+                                ]);
+                            }
+                        }
+                    } else {
+                        return response([
+                            "status" => false,
+                            "message" => "fail fetch file ID from Google Drive",
+                            "response_body" => $fileIdResponse->body(),
+                            "response_status" => $fileIdResponse->status(),
+                        ]);
+                    }
+                }
+
+                $aboutUs->delete();
+
+                return response([
+                    "status" => true,
+                    "message" => "success delete aboutUs",
                 ]);
 
-                if ($fileIdResponse->successful()) {
-                    $files = json_decode($fileIdResponse->body(), true)['files'];
-                    if (!empty($files)) {
-                        $fileId = $files[0]['id'];
-
-                        $deleteResponse = Http::withHeaders([
-                            'Authorization' => 'Bearer ' . $accessToken,
-                        ])->delete("https://www.googleapis.com/drive/v3/files/$fileId");
-
-                        if (!$deleteResponse->successful()) {
-                            return response([
-                                "status" => false,
-                                "message" => "fail delete image from Google Drive",
-                                "response_body" => $deleteResponse->body(),
-                                "response_status" => $deleteResponse->status(),
-                            ]);
-                        }
-                    }
-                } else {
-                    return response([
-                        "status" => false,
-                        "message" => "fail fetch file ID from Google Drive",
-                        "response_body" => $fileIdResponse->body(),
-                        "response_status" => $fileIdResponse->status(),
-                    ]);
-                }
+            } catch (\Throwable $th) {
+                return response([
+                    "status" => false,
+                    "message" => "fail delete aboutUs",
+                    "error" => $th->getMessage()
+                ]);
             }
-
-            $aboutUs->delete();
-
-            return response([
-                "status" => true,
-                "message" => "success delete aboutUs",
-            ]);
-
-        } catch (\Throwable $th) {
-            return response([
-                "status" => false,
-                "message" => "fail delete aboutUs",
-                "error" => $th->getMessage()
-            ]);
-        }
     }
 }
