@@ -193,7 +193,6 @@ class OurTeamsController extends Controller
 
             $ourTeams->update([
                 "name" => $req->name,
-                "business_name" => $req->business_name,
                 "image" => $name_generator,
                 "description" => $req->description,
                 'updated_at' => Carbon::now()
