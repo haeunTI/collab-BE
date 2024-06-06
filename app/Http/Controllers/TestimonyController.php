@@ -6,11 +6,51 @@ use App\Models\Testimony;
 use App\Http\Requests\StoreTestimonyRequest;
 use App\Http\Requests\UpdateTestimonyRequest;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
 class TestimonyController extends Controller
 {
+    private function token() {
+        $client_id = \Config('services.google.client_id');
+        $client_secret = \Config('services.google.client_secret');
+        $refresh_token = \Config('services.google.refresh_token');
+        $response= Http::post('https://oauth2.googleapis.com/token', [
+            'client_id' => $client_id,
+            'client_secret' => $client_secret,
+            'refresh_token' => $refresh_token,
+            'grant_type' => 'refresh_token',
+        ]);
+
+        $accessToken = json_decode((string)$response->getBody(), true)['access_token'];
+        return $accessToken;
+
+    }
+
+    private function deleteOldImageFromDrive($filename, $accessToken) {
+        $fileIdResponse = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get('https://www.googleapis.com/drive/v3/files', [
+            'q' => "name='$filename' and trashed=false",
+            'fields' => 'files(id, name)',
+        ]);
+
+        if ($fileIdResponse->successful()) {
+            $files = json_decode($fileIdResponse->body(), true)['files'];
+            if (!empty($files)) {
+                $fileId = $files[0]['id'];
+
+                $deleteResponse = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ])->delete("https://www.googleapis.com/drive/v3/files/$fileId");
+
+                return $deleteResponse->successful();
+            }
+        }
+
+        return false;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -34,41 +74,50 @@ class TestimonyController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreTestimonyRequest $req)
     {
         try{
             if($req->has('image')){
-              $manager = new ImageManager(new Driver());
-              $img = $manager->read($req->file('image'));
-              $img->resize(370, 370);
-              $image = $req->image;
-              $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-              $img->toJpeg()->save(base_path('public/img/testimony/'.$name_generator));
+                $accessToken = $this->token();
+
+                $file = $req->file('image');
+                $name_generator = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+
+              $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ])->attach(
+                    'metadata', json_encode([
+                        'name' => $name_generator,
+                        'parents' => [\Config('services.google.testimony_folder_id')],
+                    ]), 'metadata.json'
+                )->attach(
+                    'file', fopen($file->getPathname(), 'r'), $name_generator
+                )->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+                
+                if($response->successful()) {
+                    $testimony = Testimony::create([
+                        "name" => $req->name,
+                        "image" => $name_generator,
+                        "business_name" => $req->business_name,
+                        "description" => $req->description,
+                        "created_at" => Carbon::now(),
+                     ]); 
+
+                    return response([
+                        "status" => true,
+                        "message" => "success post testimony",
+                        "data" => $testimony
+                    ]);
+                 } else {
+                    return response([
+                        "access" => $accessToken,
+                        "response_body" => $response->body(),
+                        "response_status" => $response->status(),
+                    ]);
+                }
             } 
-  
-             $testimony = Testimony::create([
-                "name" => $req->name,
-                "image" => $name_generator,
-                "business_name" => $req->business_name,
-                "description" => $req->description,
-                "created_at" => Carbon::now(),
-             ]); 
-  
-             return response([
-                 "status" => true,
-                 "message" => "success post testimony",
-                 "data" => $testimony
-             ]);
   
          } catch (\Throwable $th) {
              return response([
@@ -101,13 +150,6 @@ class TestimonyController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Testimony $testimony)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -117,13 +159,38 @@ class TestimonyController extends Controller
         try {
             $testimony = Testimony::findOrFail($id);
 
+            $name_generator = $testimony->image; 
+
             if($req->has('image')){
-                $manager = new ImageManager(new Driver());
-                $img = $manager->read($req->file('image'));
-                $img->resize(370, 370);
-                $image = $req->image;
-                $name_generator = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-                $img->toJpeg()->save(base_path('public/img/testimony/'.$name_generator));
+                $accessToken = $this->token();
+
+                $file = $req->file('image');
+                $name_generator = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ])->attach(
+                    'metadata', json_encode([
+                        'name' => $name_generator,
+                        'parents' => [\Config('services.google.testimony_folder_id')],
+                    ]), 'metadata.json'
+                )->attach(
+                    'file', fopen($file->getPathname(), 'r'), $name_generator
+                )->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+
+                if (!$response->successful()) {
+                    return response([
+                        "status" => false,
+                        "message" => "fail update testimony",
+                        "response_body" => $response->body(),
+                        "response_status" => $response->status(),
+                        "access" => $accessToken
+                    ]);
+                }
+
+                if ($testimony->image) {
+                    $this->deleteOldImageFromDrive($testimony->image, $accessToken);
+                }
             } 
 
 
@@ -156,8 +223,49 @@ class TestimonyController extends Controller
     public function destroy($id)
     {
         try{
-            Testimony::findOrFail($id)->delete(); 
+            $testimony = Testimony::findOrFail($id)->delete(); 
+            $imageName = $testimony->image;
  
+            if ($imageName) {
+                $accessToken = $this->token();
+
+                $fileIdResponse = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ])->get('https://www.googleapis.com/drive/v3/files', [
+                    'q' => "name='$imageName' and trashed=false",
+                    'fields' => 'files(id, name)',
+                ]);
+
+                if ($fileIdResponse->successful()) {
+                    $files = json_decode($fileIdResponse->body(), true)['files'];
+                    if (!empty($files)) {
+                        $fileId = $files[0]['id'];
+
+                        $deleteResponse = Http::withHeaders([
+                            'Authorization' => 'Bearer ' . $accessToken,
+                        ])->delete("https://www.googleapis.com/drive/v3/files/$fileId");
+
+                        if (!$deleteResponse->successful()) {
+                            return response([
+                                "status" => false,
+                                "message" => "fail delete image from Google Drive",
+                                "response_body" => $deleteResponse->body(),
+                                "response_status" => $deleteResponse->status(),
+                            ]);
+                        }
+                    }
+                } else {
+                    return response([
+                        "status" => false,
+                        "message" => "fail fetch file ID from Google Drive",
+                        "response_body" => $fileIdResponse->body(),
+                        "response_status" => $fileIdResponse->status(),
+                    ]);
+                }
+            }
+
+            $testimony->delete();
+
             return response([
                 "status" => true,
                 "message" => "success delete testimony",

@@ -43,6 +43,7 @@ return [
         'about_us_folder_id' => env('GOOGLE_DRIVE_ABOUT_US_FOLDER_ID'),
         'social_media_folder_id' => env('GOOGLE_DRIVE_SOCIAL_MEDIA_FOLDER_ID'),
         'banner_folder_id' => env('GOOGLE_DRIVE_BANNER_FOLDER_ID'),
+        'testimony_folder_id' => env('GOOGLE_DRIVE_TESTIMONY_FOLDER_ID'),
     ]
 
 ];
