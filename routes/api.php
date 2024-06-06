@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\OurServicesController;
 use App\Http\Controllers\OurTeamsController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\TestimonyController;
@@ -75,6 +76,18 @@ Route::middleware(['auth:api'])->group(function () {
     Route::patch('/our-teams/{id}', [OurTeamsController::class, 'update']);
     Route::delete('/our-teams/{id}', [OurTeamsController::class, 'destroy']);
 
+
+
+    
+    //our-services
+    Route::get('/our-services', [OurServicesController::class, 'index']);
+    Route::post('/our-services', [OurServicesController::class, 'store']);
+    Route::get('/our-services/{id}', [OurServicesController::class, 'show']);
+
+    
+    Route::post('/our-services/{id}', [OurServicesController::class, 'update']);
+    Route::patch('/our-services/{id}', [OurServicesController::class, 'update']);
+    Route::delete('/our-services/{id}', [OurServicesController::class, 'destroy']);
 
     
 
