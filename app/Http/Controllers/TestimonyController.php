@@ -223,7 +223,7 @@ class TestimonyController extends Controller
     public function destroy($id)
     {
         try{
-            $testimony = Testimony::findOrFail($id)->delete(); 
+            $testimony = Testimony::findOrFail($id); 
             $imageName = $testimony->image;
  
             if ($imageName) {
