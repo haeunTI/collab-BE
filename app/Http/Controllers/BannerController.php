@@ -223,10 +223,11 @@ class BannerController extends Controller
      */
     public function destroy($id)
     {
-        try{
-            $banner = Banner::findOrFail($id)->delete(); 
+        try {
+            // Find the banner first
+            $banner = Banner::findOrFail($id); 
             $imageName = $banner->image;
- 
+
             if ($imageName) {
                 $accessToken = $this->token();
 
@@ -265,8 +266,14 @@ class BannerController extends Controller
                 }
             }
 
+            // Delete the banner after processing the image
             $banner->delete();
- 
+
+            return response([
+                "status" => true,
+                "message" => "Banner and associated image deleted successfully",
+            ]);
+
         } catch (\Throwable $th) {
             return response([
                 "status" => false,
@@ -275,4 +282,5 @@ class BannerController extends Controller
             ]);
         }
     }
+
 }
