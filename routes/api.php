@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:api');
 
-Route::post('/auth/login', [UserController::class, 'login']);
+Route::post('/login', [UserController::class, 'login']);
 
 
 Route::middleware(['auth:api'])->group(function () {
