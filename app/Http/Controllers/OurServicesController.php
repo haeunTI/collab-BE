@@ -174,8 +174,7 @@ class OurServicesController extends Controller
             }
     
             $ourServices->update([
-                "name" => $req->name,
-                "business_name" => $req->business_name,
+                "title" => $req->name,
                 "image" => $name_generator,
                 "description" => $req->description,
                 'updated_at' => Carbon::now()
