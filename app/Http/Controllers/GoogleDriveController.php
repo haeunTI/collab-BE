@@ -26,74 +26,53 @@ class GoogleDriveController
     public static function checkAndCreateFolder($folderName) {
         try {
             $accessToken = self::getAccessToken();
+            $parentFolderId = '1rkJI5WcNeEHiyqbQyV5ujBbbDBoSQwoi';
     
-            $parentFolderResponse = Http::withHeaders([
+            // Check if the target folder exists inside the parent folder
+            $folderIdResponse = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $accessToken,
             ])->get('https://www.googleapis.com/drive/v3/files', [
-                'q' => "name='Laravel' and mimeType='application/vnd.google-apps.folder' and trashed=false",
+                'q' => "name='$folderName' and mimeType='application/vnd.google-apps.folder' and trashed=false and '$parentFolderId' in parents",
                 'fields' => 'files(id, name)',
             ]);
     
-            if ($parentFolderResponse->successful()) {
-                $parentFolders = json_decode($parentFolderResponse->body(), true)['files'];
-                if (empty($parentFolders)) {
-                    Log::error('Parent folder "LARAVEL" does not exist.');
-                    throw new \Exception('Parent folder "LARAVEL" does not exist.');
-                }
+            if ($folderIdResponse->successful()) {
+                $folders = json_decode($folderIdResponse->body(), true)['files'];
+                if (empty($folders)) {
+                    // Folder does not exist, create it inside the parent folder
+                    $createFolderResponse = Http::withHeaders([
+                        'Authorization' => 'Bearer ' . $accessToken,
+                    ])->post('https://www.googleapis.com/drive/v3/files', [
+                        'name' => $folderName,
+                        'mimeType' => 'application/vnd.google-apps.folder',
+                        'parents' => [$parentFolderId],
+                    ]);
     
-                $parentFolderId = $parentFolders[0]['id'];
-    
-                // Check if the target folder exists inside the parent folder
-                $folderIdResponse = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $accessToken,
-                ])->get('https://www.googleapis.com/drive/v3/files', [
-                    'q' => "name='$folderName' and mimeType='application/vnd.google-apps.folder' and trashed=false and '$parentFolderId' in parents",
-                    'fields' => 'files(id, name)',
-                ]);
-    
-                if ($folderIdResponse->successful()) {
-                    $folders = json_decode($folderIdResponse->body(), true)['files'];
-                    if (empty($folders)) {
-                        // Folder does not exist, create it inside the parent folder
-                        $createFolderResponse = Http::withHeaders([
-                            'Authorization' => 'Bearer ' . $accessToken,
-                        ])->post('https://www.googleapis.com/drive/v3/files', [
-                            'name' => $folderName,
-                            'mimeType' => 'application/vnd.google-apps.folder',
-                            'parents' => [$parentFolderId],
-                        ]);
-    
-                        if ($createFolderResponse->successful()) {
-                            return json_decode($createFolderResponse->body(), true)['id'];
-                        } else {
-                            Log::error('Failed to create folder on Google Drive', [
-                                'response_body' => $createFolderResponse->body(),
-                                'response_status' => $createFolderResponse->status(),
-                            ]);
-                            throw new \Exception("Failed to create folder on Google Drive: " . $createFolderResponse->body());
-                        }
+                    if ($createFolderResponse->successful()) {
+                        return json_decode($createFolderResponse->body(), true)['id'];
                     } else {
-                        return $folders[0]['id'];
+                        Log::error('Failed to create folder on Google Drive', [
+                            'response_body' => $createFolderResponse->body(),
+                            'response_status' => $createFolderResponse->status(),
+                        ]);
+                        throw new \Exception("Failed to create folder on Google Drive: " . $createFolderResponse->body());
                     }
                 } else {
-                    Log::error('Failed to fetch folder ID from Google Drive', [
-                        'response_body' => $folderIdResponse->body(),
-                        'response_status' => $folderIdResponse->status(),
-                    ]);
-                    throw new \Exception("Failed to fetch folder ID from Google Drive: " . $folderIdResponse->body());
+                    return $folders[0]['id'];
                 }
             } else {
-                Log::error('Failed to fetch parent folder ID from Google Drive', [
-                    'response_body' => $parentFolderResponse->body(),
-                    'response_status' => $parentFolderResponse->status(),
+                Log::error('Failed to fetch folder ID from Google Drive', [
+                    'response_body' => $folderIdResponse->body(),
+                    'response_status' => $folderIdResponse->status(),
                 ]);
-                throw new \Exception("Failed to fetch parent folder ID from Google Drive: " . $parentFolderResponse->body());
+                throw new \Exception("Failed to fetch folder ID from Google Drive: " . $folderIdResponse->body());
             }
         } catch (\Throwable $th) {
             Log::error('Exception in checkAndCreateFolder', ['error' => $th->getMessage()]);
             throw $th;
         }
     }
+    
     
     public static function deleteOldImageFromDrive($imageName)
     {
