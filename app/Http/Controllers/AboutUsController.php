@@ -44,7 +44,7 @@ class AboutUsController extends Controller
             if($req->has('image')){
 
                 $file = $req->file('image');
-                $folderName = 'our_services'; 
+                $folderName = 'about_us'; 
                 $name_generator = GoogleDriveController::uploadImageToFolder($file, $folderName);
 
                 $aboutUs = AboutUs::create([
