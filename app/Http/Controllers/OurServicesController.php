@@ -75,23 +75,36 @@ class OurServicesController extends Controller
                         "data" => $ourServices
                     ]);
                 } else {
+                    Log::error('File upload failed', [
+                        'access' => $accessToken,
+                        'response_body' => $response->body(),
+                        'response_status' => $response->status(),
+                    ]);
+    
                     return response([
-                        "access" => $accessToken,
+                        "status" => false,
+                        "message" => "Failed to upload file to Google Drive",
                         "response_body" => $response->body(),
                         "response_status" => $response->status(),
-                    ]);
+                    ], 500);
                 }
+            } else {
+                return response([
+                    "status" => false,
+                    "message" => "No image file found in the request",
+                ], 400);
             }
-    
         } catch (\Throwable $th) {
+            Log::error('Failed to post our services', ['error' => $th->getMessage()]);
+    
             return response([
                 "status" => false,
                 "message" => "fail post our services",
                 "error" => $th->getMessage()
-            ]);
+            ], 500);
         }
     }
-
+    
 
     /**
      * Display the specified resource.
