@@ -30,7 +30,7 @@ class GoogleDriveController
             $parentFolderResponse = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $accessToken,
             ])->get('https://www.googleapis.com/drive/v3/files', [
-                'q' => "name='Collab' and mimeType='application/vnd.google-apps.folder' and trashed=false",
+                'q' => "name='Laravel' and mimeType='application/vnd.google-apps.folder' and trashed=false",
                 'fields' => 'files(id, name)',
             ]);
     
