@@ -32,14 +32,6 @@ class ContactUsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreContactUsRequest $req)
@@ -92,21 +84,12 @@ class ContactUsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ContactUs $contactUs)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateContactUsRequest $req, $id)
     {
         try {
             $contactUs = ContactUs::findOrFail($id);
-
 
             $contactUs->update([
                 "name" => $req->name,

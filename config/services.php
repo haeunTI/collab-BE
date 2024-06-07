@@ -40,9 +40,7 @@ return [
         'client_secret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
         'refresh_token' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
         'folder_id' => env('GOOGLE_DRIVE_FOLDER_ID'),
-        'social_media_folder_id' => env('GOOGLE_DRIVE_SOCIAL_MEDIA_FOLDER_ID'),
         'testimony_folder_id' => env('GOOGLE_DRIVE_TESTIMONY_FOLDER_ID'),
-        'our_teams_folder_id' => env('GOOGLE_DRIVE_OUR_TEAMS_FOLDER_ID'),
     ]
 
 ];
