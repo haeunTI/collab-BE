@@ -72,6 +72,40 @@ class GoogleDriveController
             throw $th;
         }
     }
+
+
+    public static function uploadImageToFolder($file, $folderName)
+    {
+        try {
+            $folderId = self::checkAndCreateFolder($folderName);
+            $name_generator = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
+            $accessToken = self::getAccessToken();
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $accessToken,
+            ])->attach(
+                'metadata', json_encode([
+                    'name' => $name_generator,
+                    'parents' => [$folderId],
+                ]), 'metadata.json'
+            )->attach(
+                'file', fopen($file->getPathname(), 'r'), $name_generator
+            )->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+
+            if ($response->successful()) {
+                return $name_generator;
+            } else {
+                Log::error('Failed to upload image to Google Drive', [
+                    'response_body' => $response->body(),
+                    'response_status' => $response->status(),
+                ]);
+                throw new \Exception("Failed to upload image to Google Drive: " . $response->body());
+            }
+        } catch (\Throwable $th) {
+            Log::error('Exception in uploadImageToFolder', ['error' => $th->getMessage()]);
+            throw $th;
+        }
+    }
     
     
     public static function deleteOldImageFromDrive($imageName)

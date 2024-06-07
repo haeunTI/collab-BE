@@ -43,26 +43,11 @@ class OurServicesController extends Controller
         try {
             if ($req->has('image')) {
                 $file = $req->file('image');
-                $name_generator = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
-                $folderName = 'our_services'; // Define your folder name here
+                $folderName = 'our_services'; 
     
-                // Check and create folder if it doesn't exist
-                $folderId = GoogleDriveController::checkAndCreateFolder($folderName);
+                $name_generator = GoogleDriveController::uploadImageToFolder($file, $folderName);
     
-                // Upload the file to the folder
-                $accessToken = GoogleDriveController::getAccessToken();
-                $response = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $accessToken,
-                ])->attach(
-                    'metadata', json_encode([
-                        'name' => $name_generator,
-                        'parents' => [$folderId],
-                    ]), 'metadata.json'
-                )->attach(
-                    'file', fopen($file->getPathname(), 'r'), $name_generator
-                )->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
-    
-                if ($response->successful()) {
+
                     $ourServices = OurServices::create([
                         "title" => $req->title,
                         "image" => $name_generator,
@@ -73,31 +58,16 @@ class OurServicesController extends Controller
                     return response([
                         "status" => true,
                         "message" => "success post our services",
-                        "data" => $folderId
+                        "data" => $ourServices
                     ]);
-                } else {
-                    Log::error('File upload failed', [
-                        'access' => $accessToken,
-                        'response_body' => $response->body(),
-                        'response_status' => $response->status(),
-                    ]);
-    
-                    return response([
-                        "status" => false,
-                        "message" => "Failed to upload file to Google Drive",
-                        "response_body" => $response->body(),
-                        "response_status" => $response->status(),
-                    ], 500);
-                }
+
             } else {
                 return response([
                     "status" => false,
                     "message" => "No image file found in the request",
                 ], 400);
             }
-        } catch (\Throwable $th) {
-            Log::error('Failed to post our services', ['error' => $th->getMessage()]);
-    
+        } catch (\Throwable $th) {    
             return response([
                 "status" => false,
                 "message" => "fail post our services",
@@ -137,63 +107,36 @@ class OurServicesController extends Controller
     {
         try {
             $ourServices = OurServices::findOrFail($id);
-            $name_generator = $ourServices->image;
-    
+            $folderName = 'our_services';
+            $imageName = $ourServices->image;
+
             if ($req->has('image')) {
                 $file = $req->file('image');
-                $name_generator = hexdec(uniqid()).'.'.$file->getClientOriginalExtension();
-                $folderName = 'our_services'; 
-    
-                $folderId = GoogleDriveController::checkAndCreateFolder($folderName);
-    
-                $accessToken = GoogleDriveController::getAccessToken();
-                $response = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $accessToken,
-                ])->attach(
-                    'metadata', json_encode([
-                        'name' => $name_generator,
-                        'parents' => [$folderId],
-                    ]), 'metadata.json'
-                )->attach(
-                    'file', fopen($file->getPathname(), 'r'), $name_generator
-                )->post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
-    
-                if (!$response->successful()) {
-                    return response([
-                        "status" => false,
-                        "message" => "fail update our services",
-                        "response_body" => $response->body(),
-                        "response_status" => $response->status(),
-                        "access" => $accessToken
-                    ]);
-                }
-    
+                $newImageName = GoogleDriveController::uploadImageToFolder($file, $folderName);
+
                 if ($ourServices->image) {
                     GoogleDriveController::deleteOldImageFromDrive($ourServices->image);
                 }
+
+                $imageName = $newImageName;
             }
-    
-            $ourServices->update([
-                "title" => $req->title,
-                "image" => $name_generator,
-                "description" => $req->description,
-                'updated_at' => Carbon::now()
-            ]);
-    
+
+            $ourServices->image = $imageName;
+            $ourServices->save();
+
             return response([
                 "status" => true,
-                "message" => "success update our services",
-                "data" => $ourServices
+                "message" => "Our services updated successfully",
             ]);
-    
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             return response([
                 "status" => false,
-                "message" => "fail update our services",
-                "error" => $th->getMessage()
+                "message" => "Failed to update our services",
+                "error" => $e->getMessage(),
             ]);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
