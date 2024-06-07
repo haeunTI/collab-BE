@@ -7,6 +7,7 @@ use App\Http\Requests\StoreOurServicesRequest;
 use App\Http\Requests\UpdateOurServicesRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class OurServicesController extends Controller
 {
@@ -72,7 +73,7 @@ class OurServicesController extends Controller
                     return response([
                         "status" => true,
                         "message" => "success post our services",
-                        "data" => $ourServices
+                        "data" => $folderId
                     ]);
                 } else {
                     Log::error('File upload failed', [
