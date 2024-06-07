@@ -46,21 +46,19 @@ class OurServicesController extends Controller
                 $folderName = 'our_services'; 
     
                 $name_generator = GoogleDriveController::uploadImageToFolder($file, $folderName);
-    
+                $ourServices = OurServices::create([
+                    "title" => $req->title,
+                    "image" => $name_generator,
+                    "description" => $req->description,
+                    "created_at" => Carbon::now(),
+                ]);
 
-                    $ourServices = OurServices::create([
-                        "title" => $req->title,
-                        "image" => $name_generator,
-                        "description" => $req->description,
-                        "created_at" => Carbon::now(),
-                    ]);
-    
-                    return response([
-                        "status" => true,
-                        "message" => "success post our services",
-                        "data" => $ourServices
-                    ]);
-
+                return response([
+                    "status" => true,
+                    "message" => "success post our services",
+                    "data" => $ourServices
+                ]);
+                    
             } else {
                 return response([
                     "status" => false,
@@ -127,6 +125,7 @@ class OurServicesController extends Controller
             return response([
                 "status" => true,
                 "message" => "Our services updated successfully",
+                "data" => $ourServices
             ]);
         } catch (\Exception $e) {
             return response([
