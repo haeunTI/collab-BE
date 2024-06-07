@@ -89,7 +89,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::patch('/our-services/{id}', [OurServicesController::class, 'update']);
     Route::delete('/our-services/{id}', [OurServicesController::class, 'destroy']);
 
-    
+
+    //logout
+    Route::get('/logout', [UserController::class, 'logout']);    
 
 });
 

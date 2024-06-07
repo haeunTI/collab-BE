@@ -38,7 +38,28 @@ class UserController extends Controller
         
     }
 
-    public function get() {
-        return response(['test' => "hellloo"]);
+    public function logout()
+    {
+        try {
+            $user = Auth::user();
+            
+            if ($user instanceof User) {
+                $user->token()->revoke();
+
+                return response([
+                    'status' => true,
+                    'message' => 'Successfully logged out'
+                ], 200);
+            } else {
+                return response(['message' => 'Invalid user type'], 422);
+            }
+
+        } catch (\Exception $e) {
+            return response([
+                'status' => false,
+                'message' => 'Failed to logout',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
