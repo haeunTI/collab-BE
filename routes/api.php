@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [UserController::class, 'login']);
 
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['auth:api', \App\Http\Middleware\RedirectIfUnauthenticated::class])->group(function () {
     
     //about us
     Route::get('/about-us', [AboutUsController::class, 'index']);
