@@ -108,7 +108,7 @@ class OurTeamsController extends Controller
                 $newImageName = GoogleDriveController::uploadImageToFolder($file, $folderName);
 
                 if ($ourTeams->image) {
-                    GoogleDriveController::deleteOldImageFromDrive($ourServices->image);
+                    GoogleDriveController::deleteOldImageFromDrive($ourTeams->image);
                 }
 
                 $imageName = $newImageName;
