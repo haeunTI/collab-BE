@@ -114,8 +114,12 @@ class OurTeamsController extends Controller
                 $imageName = $newImageName;
             } 
 
-            $ourTeams->image = $imageName;
-            $ourTeams->save();
+            $ourTeams   ->update([
+                "name" => $req->name,
+                "description" => $req->description,
+                "image" => $imageName,
+                'updated_at' => Carbon::now()
+            ]);
 
             return response([
                 "status" => true,  

@@ -117,8 +117,11 @@ class AboutUsController extends Controller
                 $imageName = $newImageName;
             }
 
-            $aboutUs->image = $imageName;
-            $aboutUs->save();
+            $aboutUs->update([
+                "description" => $req->description,
+                "image" => $imageName,
+                'updated_at' => Carbon::now()
+            ]);
 
             return response([
                 "status" => true,

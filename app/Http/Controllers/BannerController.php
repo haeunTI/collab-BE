@@ -112,8 +112,11 @@ class BannerController extends Controller
                 $imageName = $newImageName;
             } 
 
-            $banner->image = $imageName;
-            $banner->save();
+            $banner->update([
+                "description" => $req->description,
+                "image" => $imageName,
+                'updated_at' => Carbon::now()
+            ]);
 
             return response([
                 "status" => true,

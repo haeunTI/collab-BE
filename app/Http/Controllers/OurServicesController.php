@@ -119,8 +119,12 @@ class OurServicesController extends Controller
                 $imageName = $newImageName;
             }
 
-            $ourServices->image = $imageName;
-            $ourServices->save();
+            $ourServices   ->update([
+                "title" => $req->title,
+                "description" => $req->description,
+                "image" => $imageName,
+                'updated_at' => Carbon::now()
+            ]);
 
             return response([
                 "status" => true,

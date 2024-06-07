@@ -119,8 +119,13 @@ class TestimonyController extends Controller
                 $imageName = $newImageName;
             } 
 
-            $testimony->image = $imageName;
-            $testimony->save();
+            $testimony->update([
+                "description" => $req->description,
+                "image" => $imageName,
+                "name" => $req->name,
+                "business_name" => $req->business_name,
+                'updated_at' => Carbon::now()
+            ]);
 
             return response([
                 "status" => true,  
