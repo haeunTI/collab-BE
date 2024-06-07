@@ -95,3 +95,10 @@ Route::middleware(['auth:api'])->group(function () {
 
 });
 
+Route::fallback(function () {
+    return response()->json(['message' => 'Page not found'], 404);
+});
+
+
+
+
