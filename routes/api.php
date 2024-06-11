@@ -23,8 +23,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/about-us', [AboutUsController::class, 'index']);
     Route::post('/about-us', [AboutUsController::class, 'store']);
     Route::get('/about-us/{id}', [AboutUsController::class, 'show']);
-
-    
     Route::post('/about-us/{id}', [AboutUsController::class, 'update']);
     Route::patch('/about-us/{id}', [AboutUsController::class, 'update']);
     Route::delete('/about-us/{id}', [AboutUsController::class, 'destroy']);
@@ -33,8 +31,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/contact-us', [ContactUsController::class, 'index']);
     Route::post('/contact-us', [ContactUsController::class, 'store']);
     Route::get('/contact-us/{id}', [ContactUsController::class, 'show']);
-
-    
     Route::post('/contact-us/{id}', [ContactUsController::class, 'update']);
     Route::patch('/contact-us/{id}', [ContactUsController::class, 'update']);
     Route::delete('/contact-us/{id}', [ContactUsController::class, 'destroy']);
@@ -44,13 +40,16 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/social-media', [SocialMediaController::class, 'index']);
     Route::post('/social-media', [SocialMediaController::class, 'store']);
 
+    Route::get('/social-media/{id}', [SocialMediaController::class, 'show']);
+    Route::post('/social-media/{id}', [SocialMediaController::class, 'update']);
+    Route::patch('/social-media/{id}', [SocialMediaController::class, 'update']);
+    Route::delete('/social-media/{id}', [SocialMediaController::class, 'destroy']);
+
 
     //testimony
     Route::get('/testimony', [TestimonyController::class, 'index']);
     Route::post('/testimony', [TestimonyController::class, 'store']);
     Route::get('/testimony/{id}', [TestimonyController::class, 'show']);
-
-    
     Route::post('/testimony/{id}', [TestimonyController::class, 'update']);
     Route::patch('/testimony/{id}', [TestimonyController::class, 'update']);
     Route::delete('/testimony/{id}', [TestimonyController::class, 'destroy']);
@@ -59,8 +58,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/banner', [BannerController::class, 'index']);
     Route::post('/banner', [BannerController::class, 'store']);
     Route::get('/banner/{id}', [BannerController::class, 'show']);
-
-    
     Route::post('/banner/{id}', [BannerController::class, 'update']);
     Route::patch('/banner/{id}', [BannerController::class, 'update']);
     Route::delete('/banner/{id}', [BannerController::class, 'destroy']);
@@ -70,8 +67,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/our-teams', [OurTeamsController::class, 'index']);
     Route::post('/our-teams', [OurTeamsController::class, 'store']);
     Route::get('/our-teams/{id}', [OurTeamsController::class, 'show']);
-
-    
     Route::post('/our-teams/{id}', [OurTeamsController::class, 'update']);
     Route::patch('/our-teams/{id}', [OurTeamsController::class, 'update']);
     Route::delete('/our-teams/{id}', [OurTeamsController::class, 'destroy']);

@@ -71,4 +71,97 @@ class SocialMediaController extends Controller
          }
     }
 
+    public function show($id)
+    {
+        try{
+            $socialMedia = SocialMedia::findOrFail($id); 
+ 
+            return response([
+                "status" => true,
+                "message" => "success get single social Media",
+                "data" => $socialMedia
+            ]);
+        } catch (\Throwable $th) {
+            return response([
+                "status" => false,
+                "message" => "fail get single social Media",
+                "error" => $th->getMessage()
+            ]);
+        }
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateSocialMediaRequest $req, $id)
+    {
+        try {
+            $socialMedia = SocialMedia::findOrFail($id);
+
+            $folderName = 'social_media';
+            $imageName = $socialMedia->image;
+
+            if($req->has('image')){
+
+                $file = $req->file('image');
+                $newImageName = GoogleDriveController::uploadImageToFolder($file, $folderName);
+
+                if ($socialMedia->image) {
+                    GoogleDriveController::deleteOldImageFromDrive($socialMedia->image);
+                }
+
+                $imageName = $newImageName;
+            } 
+
+            $socialMedia->update([
+                "image" => $imageName,
+                "name" => $req->name,
+                "url" => $req->url,
+                'updated_at' => Carbon::now()
+            ]);
+
+            return response([
+                "status" => true,  
+                "message" => "success update social media",
+                "data" => $socialMedia
+            ]);
+
+        } catch (\Throwable $th) {
+            return response([
+                "status" => false,
+                "message" => "fail update social media",
+                "error" => $th->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        try{
+            $socialMedia = SocialMedia::findOrFail($id); 
+            $imageName = $socialMedia->image;
+ 
+            if ($imageName) {
+                GoogleDriveController::deleteOldImageFromDrive($imageName);
+            }
+
+            $socialMedia->delete();
+
+            return response([
+                "status" => true,
+                "message" => "success delete social media",
+            ]);
+ 
+        } catch (\Throwable $th) {
+            return response([
+                "status" => false,
+                "message" => "fail delete social media",
+                "error" => $th->getMessage()
+            ]);
+        }
+    }
 }
