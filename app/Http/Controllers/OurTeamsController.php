@@ -11,8 +11,34 @@ use Illuminate\Support\Facades\Http;
 class OurTeamsController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
+    *    @OA\Get(
+    *       path="/our-teams",
+    *       tags={"Our Team"},
+    *       operationId="our_teams",
+    *       summary="ambil semua Our Team",
+    *       security={{"bearerAuth":{}}},
+    *       description="Mengambil Data Semua Our Team",
+    *       @OA\Response(
+    *           response="200",
+    *           description="Ok",
+    *           @OA\JsonContent
+    *           (example={
+    *               "success": true,
+    *               "message": "success get all our_teams",
+    *               "data": {
+    *                   {
+    *                   "id": 8,
+    *                   "image": "1801532517550099.png",
+    *                   "name": "sip",
+    *                   "description": "ok",
+    *                   "created_at": "2024-06-11T03:08:13.000000Z",
+    *                   "updated_at": "2024-06-11T03:08:13.000000Z"
+    *                  }
+    *              }
+    *          }),
+    *      ),
+    *  )
+    */
 
     public function index()
     {
@@ -34,8 +60,68 @@ class OurTeamsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
+    *    @OA\Post(
+    *       path="/our-teams",
+    *       tags={"Our Teams"},
+    *       operationId="create_our_teams",
+    *       summary="Create new Our Teams",
+    *       security={{"bearerAuth":{}}},
+    *       description="Create a new Our Teams",
+    *       @OA\RequestBody(
+    *           required=true,
+    *           @OA\MediaType(
+    *               mediaType="multipart/form-data",
+    *               @OA\Schema(
+    *                   @OA\Property(
+    *                       property="image",
+    *                       type="string",
+    *                       format="binary",
+    *                       description="The image of Our Teams"
+    *                   ),
+    *                   @OA\Property(
+    *                       property="description",
+    *                       type="string",
+    *                       description="The description of Our Teams"
+    *                   ),
+    *                   @OA\Property(
+    *                       property="name",
+    *                       type="string",
+    *                       description="The name of Our Teams"
+    *                   )
+    *               )
+    *           )
+    *       ),
+    *       @OA\Response(
+    *           response="200",
+    *           description="Successful response",
+    *           @OA\JsonContent(
+    *               example={
+    *                   "status": true,
+    *                   "message": "success post Our Teams",
+    *                   "data": {
+    *                        "image": "1801797620165543.jpg",
+    *                        "name": "ok",
+    *                        "description": "lorem ipsumwfsjdkjfkjsdkfjakdjfk",
+    *                        "created_at": "2024-06-14T01:21:56.000000Z",
+    *                        "updated_at": "2024-06-14T01:21:56.000000Z",
+    *                        "id": 21
+    *                   }
+    *               }
+    *           )
+    *       ),
+    *       @OA\Response(
+    *           response="400",
+    *           description="Bad request",
+    *           @OA\JsonContent(
+    *               example={
+    *                   "status": false,
+    *                   "message": "fail post Our Teams",
+    *                   "error": "Validation error message"
+    *               }
+    *           )
+    *       )
+    *    )
+    */
     public function store(StoreOurTeamsRequest $req)
     {
         try{
@@ -72,8 +158,51 @@ class OurTeamsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
+    *    @OA\Get(
+    *       path="/our-teams/{id}",
+    *       tags={"Our Teams"},
+    *       operationId="single_our_teams",
+    *       summary="Get single Our Teams",
+    *       security={{"bearerAuth":{}}},
+    *       description="Retrieve a single Our Teams by ID",
+    *       @OA\Parameter(
+    *           name="id",
+    *           in="path",
+    *           required=true,
+    *           @OA\Schema(type="integer"),
+    *           description="The ID of the Our Teams"
+    *       ),
+    *       @OA\Response(
+    *           response="200",
+    *           description="Successful response",
+    *           @OA\JsonContent(
+    *               example={
+    *                   "status": true,
+    *                   "message": "success get Our Teams",
+    *                   "data": {
+    *                       "id": 8,
+    *                   "image": "1801532517550099.png",
+    *                   "name": "sip",
+    *                   "description": "ok",
+    *                   "created_at": "2024-06-11T03:08:13.000000Z",
+    *                   "updated_at": "2024-06-11T03:08:13.000000Z"
+    *                   }
+    *               }
+    *           )
+    *       ),
+    *       @OA\Response(
+    *           response="404",
+    *           description="Our Teams not found",
+    *           @OA\JsonContent(
+    *               example={
+    *                   "status": false,
+    *                   "message": "fail get Our Teams",
+    *                   "error": "No query results for model [App\\Models\\AboutUs] 10"
+    *               }
+    *           )
+    *       )
+    *    )
+    */
     public function show($id)
     {
         try{
@@ -94,7 +223,73 @@ class OurTeamsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     *    @OA\Post(
+     *       path="/our-teams/{id}",
+     *       tags={"Our Teams"},
+     *       operationId="update_our_teams",
+     *       summary="Update Our Teams",
+     *       security={{"bearerAuth":{}}},
+     *       description="Update Our Teams by ID",
+     *       @OA\Parameter(
+     *           name="id",
+     *           in="path",
+     *           required=true,
+     *           @OA\Schema(type="integer"),
+     *           description="The ID of Our Teams"
+     *       ),
+     *       @OA\RequestBody(
+     *           required=true,
+     *           @OA\MediaType(
+     *               mediaType="multipart/form-data",
+     *               @OA\Schema(
+     *                   @OA\Property(
+    *                       property="image",
+    *                       type="string",
+    *                       format="binary",
+    *                       description="The image of Our Teams"
+    *                   ),
+    *                   @OA\Property(
+    *                       property="description",
+    *                       type="string",
+    *                       description="The description of Our Teams"
+    *                   ),
+    *                   @OA\Property(
+    *                       property="name",
+    *                       type="string",
+    *                       description="The name of Our Teams"
+    *                   )
+     *               )
+     *           )
+     *       ),
+     *       @OA\Response(
+     *           response="200",
+     *           description="Successful response",
+     *           @OA\JsonContent(
+     *               example={
+     *                   "status": true,
+     *                   "message": "success update Our Teams",
+     *                   "data": {
+     *                       "id": 1,
+     *                       "description": "Updated Our Teams",
+     *                       "image": "updated_image_name.jpg",
+     *                       "created_at": "2024-05-18 15:52:01",
+     *                       "updated_at": "2024-05-18 15:52:01"
+     *                   }
+     *               }
+     *           )
+     *       ),
+     *       @OA\Response(
+     *           response="404",
+     *           description="Our Teams not found",
+     *           @OA\JsonContent(
+     *               example={
+     *                   "status": false,
+     *                   "message": "fail update Our Teams",
+     *                   "error": "No query results for model [App\\Models\\AboutUs] 10"
+     *               }
+     *           )
+     *       )
+     *    )
      */
     public function update(UpdateOurTeamsRequest $req, $id)
     {
@@ -137,7 +332,42 @@ class OurTeamsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     *    @OA\Delete(
+     *       path="/our-teams/{id}",
+     *       tags={"Our Teams"},
+     *       operationId="delete_our_teams",
+     *       summary="Delete Our Teams",
+     *       security={{"bearerAuth":{}}},
+     *       description="Delete Our Teams by ID",
+     *       @OA\Parameter(
+     *           name="id",
+     *           in="path",
+     *           required=true,
+     *           @OA\Schema(type="integer"),
+     *           description="The ID of the Our Teams"
+     *       ),
+     *       @OA\Response(
+     *           response="200",
+     *           description="Successful response",
+     *           @OA\JsonContent(
+     *               example={
+     *                   "status": true,
+     *                   "message": "success delete Our Teams"
+     *               }
+     *           )
+     *       ),
+     *       @OA\Response(
+     *           response="404",
+     *           description="Our Teams not found",
+     *           @OA\JsonContent(
+     *               example={
+     *                   "status": false,
+     *                   "message": "fail delete Our Teams",
+     *                   "error": "No query results for model [App\\Models\\AboutUs] 10"
+     *               }
+     *           )
+     *       )
+     *    )
      */
     public function destroy($id)
     {

@@ -31,10 +31,10 @@ class AboutUsController extends Controller
     *               "data": {
     *                   {
     *                   "id": 15,
-                    *  "image": "1801550969236851.jpg",
-                    *  "description": "Sip",
-                    *  "created_at": "2024-06-10T02:36:13.000000Z",
-                    *  "updated_at": "2024-06-11T08:01:32.000000Z"
+    *                   "image": "1801550969236851.jpg",
+    *                   "description": "Sip",
+    *                   "created_at": "2024-06-10T02:36:13.000000Z",
+    *                   "updated_at": "2024-06-11T08:01:32.000000Z"
     *                  }
     *              }
     *          }),
@@ -61,62 +61,63 @@ class AboutUsController extends Controller
         }
     }
 
-       /**
-        *    @OA\Post(
-        *       path="/about-us",
-        *       tags={"About Us"},
-        *       operationId="create_about_us",
-        *       summary="Create new about us",
-        *       security={{"bearerAuth":{}}},
-        *       description="Create a new about us",
-        *       @OA\RequestBody(
-        *           required=true,
-        *           @OA\MediaType(
-        *               mediaType="multipart/form-data",
-        *               @OA\Schema(
-        *                   @OA\Property(
-        *                       property="image",
-        *                       type="string",
-        *                       description="The image of about us"
-        *                   ),
-        *                   @OA\Property(
-        *                       property="description",
-        *                       type="string",
-        *                       description="The description of about us"
-        *                   )
-        *               )
-        *           )
-        *       ),
-        *       @OA\Response(
-        *           response="200",
-        *           description="Successful response",
-        *           @OA\JsonContent(
-        *               example={
-        *                   "status": true,
-        *                   "message": "success post about us",
-        *                   "data": {
-        *                        "image": "1801797620165543.jpg",
-        *                        "description": "lorem ipsumwfsjdkjfkjsdkfjakdjfk",
-        *                        "created_at": "2024-06-14T01:21:56.000000Z",
-        *                        "updated_at": "2024-06-14T01:21:56.000000Z",
-        *                        "id": 21
-        *                   }
-        *               }
-        *           )
-        *       ),
-        *       @OA\Response(
-        *           response="400",
-        *           description="Bad request",
-        *           @OA\JsonContent(
-        *               example={
-        *                   "status": false,
-        *                   "message": "fail post about us",
-        *                   "error": "Validation error message"
-        *               }
-        *           )
-        *       )
-        *    )
-        */
+    /**
+    *    @OA\Post(
+    *       path="/about-us",
+    *       tags={"About Us"},
+    *       operationId="create_about_us",
+    *       summary="Create new about us",
+    *       security={{"bearerAuth":{}}},
+    *       description="Create a new about us",
+    *       @OA\RequestBody(
+    *           required=true,
+    *           @OA\MediaType(
+    *               mediaType="multipart/form-data",
+    *               @OA\Schema(
+    *                   @OA\Property(
+    *                       property="image",
+    *                       type="string",
+    *                       format="binary",
+    *                       description="The image of about us"
+    *                   ),
+    *                   @OA\Property(
+    *                       property="description",
+    *                       type="string",
+    *                       description="The description of about us"
+    *                   )
+    *               )
+    *           )
+    *       ),
+    *       @OA\Response(
+    *           response="200",
+    *           description="Successful response",
+    *           @OA\JsonContent(
+    *               example={
+    *                   "status": true,
+    *                   "message": "success post about us",
+    *                   "data": {
+    *                        "image": "1801797620165543.jpg",
+    *                        "description": "lorem ipsumwfsjdkjfkjsdkfjakdjfk",
+    *                        "created_at": "2024-06-14T01:21:56.000000Z",
+    *                        "updated_at": "2024-06-14T01:21:56.000000Z",
+    *                        "id": 21
+    *                   }
+    *               }
+    *           )
+    *       ),
+    *       @OA\Response(
+    *           response="400",
+    *           description="Bad request",
+    *           @OA\JsonContent(
+    *               example={
+    *                   "status": false,
+    *                   "message": "fail post about us",
+    *                   "error": "Validation error message"
+    *               }
+    *           )
+    *       )
+    *    )
+    */
     public function store(StoreAboutUsRequest $req)
     {
         try{
@@ -154,9 +155,6 @@ class AboutUsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    /**
     *    @OA\Get(
     *       path="/about-us/{id}",
     *       tags={"About Us"},
@@ -177,7 +175,7 @@ class AboutUsController extends Controller
     *           @OA\JsonContent(
     *               example={
     *                   "status": true,
-    *                   "message": "success get blog",
+    *                   "message": "success get about us",
     *                   "data": {
     *                       "id": 15,
     *                           "image": "1801733198090700.jpg",
@@ -220,14 +218,10 @@ class AboutUsController extends Controller
     }
 
     /**
-    * Update the specified resource in storage.
-    */
-
-    /**
      *    @OA\Post(
      *       path="/about-us/{id}",
      *       tags={"About Us"},
-     *       operationId="updateBlog",
+     *       operationId="update_about_us",
      *       summary="Update about us",
      *       security={{"bearerAuth":{}}},
      *       description="Update about us by ID",
@@ -266,9 +260,8 @@ class AboutUsController extends Controller
      *                   "message": "success update about us",
      *                   "data": {
      *                       "id": 1,
-     *                       "title": "Updated About Us",
-     *                       "cover": "updated_image_name.jpg",
-     *                       "content": "Updated about us content here",
+     *                       "description": "Updated About Us",
+     *                       "image": "updated_image_name.jpg",
      *                       "created_at": "2024-05-18 15:52:01",
      *                       "updated_at": "2024-05-18 15:52:01"
      *                   }
@@ -327,10 +320,6 @@ class AboutUsController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-
      /**
      *    @OA\Delete(
      *       path="/about-us/{id}",
@@ -338,7 +327,7 @@ class AboutUsController extends Controller
      *       operationId="delete_about_us",
      *       summary="Delete about us",
      *       security={{"bearerAuth":{}}},
-     *       description="Delete a blog about us by ID",
+     *       description="Delete about us by ID",
      *       @OA\Parameter(
      *           name="id",
      *           in="path",

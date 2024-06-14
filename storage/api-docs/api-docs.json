@@ -38,10 +38,2129 @@
                                     "message": "success get all about_us",
                                     "data": [
                                         {
-                                            "id": "1",
-                                            "title": "About Us"
+                                            "id": 15,
+                                            "image": "1801550969236851.jpg",
+                                            "description": "Sip",
+                                            "created_at": "2024-06-10T02:36:13.000000Z",
+                                            "updated_at": "2024-06-11T08:01:32.000000Z"
                                         }
                                     ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "About Us"
+                ],
+                "summary": "Create new about us",
+                "description": "Create a new about us",
+                "operationId": "create_about_us",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image of about us",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "description": {
+                                        "description": "The description of about us",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success post about us",
+                                    "data": {
+                                        "image": "1801797620165543.jpg",
+                                        "description": "lorem ipsumwfsjdkjfkjsdkfjakdjfk",
+                                        "created_at": "2024-06-14T01:21:56.000000Z",
+                                        "updated_at": "2024-06-14T01:21:56.000000Z",
+                                        "id": 21
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail post about us",
+                                    "error": "Validation error message"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/about-us/{id}": {
+            "get": {
+                "tags": [
+                    "About Us"
+                ],
+                "summary": "Get single about us",
+                "description": "Retrieve a single about us by ID",
+                "operationId": "single_about_us",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the about us",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success get about us",
+                                    "data": {
+                                        "id": 15,
+                                        "image": "1801733198090700.jpg",
+                                        "description": "ok",
+                                        "created_at": "2024-06-10T02:36:13.000000Z",
+                                        "updated_at": "2024-06-13T08:17:59.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "about us not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail get about us",
+                                    "error": "No query results for model [App\\\\Models\\\\AboutUs] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "About Us"
+                ],
+                "summary": "Update about us",
+                "description": "Update about us by ID",
+                "operationId": "update_about_us",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of about us",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "description": {
+                                        "description": "The description of about us",
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "description": "The image of about us",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success update about us",
+                                    "data": {
+                                        "id": 1,
+                                        "description": "Updated About Us",
+                                        "image": "updated_image_name.jpg",
+                                        "created_at": "2024-05-18 15:52:01",
+                                        "updated_at": "2024-05-18 15:52:01"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "About us not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail update about us",
+                                    "error": "No query results for model [App\\\\Models\\\\AboutUs] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "About Us"
+                ],
+                "summary": "Delete about us",
+                "description": "Delete about us by ID",
+                "operationId": "delete_about_us",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the about us",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success delete about us"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "About us not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail delete about us",
+                                    "error": "No query results for model [App\\\\Models\\\\AboutUs] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/banner": {
+            "get": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "ambil semua banner",
+                "description": "Mengambil Data Semua banner",
+                "operationId": "banner",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "success": true,
+                                    "message": "success get all banner",
+                                    "data": [
+                                        {
+                                            "id": 15,
+                                            "image": "1801733198090700.jpg",
+                                            "description": "bio",
+                                            "created_at": "2024-06-10T02:36:13.000000Z",
+                                            "updated_at": "2024-06-11T08:01:32.000000Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "Create new banner",
+                "description": "Create a new banner",
+                "operationId": "create_banner",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image of banner",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "description": {
+                                        "description": "The description of banner",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success post banner",
+                                    "data": {
+                                        "image": "1801799915486786.jpg",
+                                        "description": "lorem ipsum",
+                                        "created_at": "2024-06-14T01:21:56.000000Z",
+                                        "updated_at": "2024-06-14T01:21:56.000000Z",
+                                        "id": 21
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail post banner",
+                                    "error": "Validation error message"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/banner/{id}": {
+            "get": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "Get single banner",
+                "description": "Retrieve a single banner by ID",
+                "operationId": "single_banner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the banner",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success get blog",
+                                    "data": {
+                                        "id": 15,
+                                        "image": "1801556148382093.jpg",
+                                        "description": "ok",
+                                        "created_at": "2024-06-10T02:36:13.000000Z",
+                                        "updated_at": "2024-06-13T08:17:59.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "banner not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail get banner",
+                                    "error": "No query results for model [App\\\\Models\\\\Banner] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "Update banner",
+                "description": "Update banner by ID",
+                "operationId": "update_banner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of banner",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "description": {
+                                        "description": "The description of banner",
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "description": "The image of banner",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success update banner",
+                                    "data": {
+                                        "id": 1,
+                                        "description": "Updated banner",
+                                        "image": "updated_image_name.jpg",
+                                        "created_at": "2024-05-18 15:52:01",
+                                        "updated_at": "2024-05-18 15:52:01"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "banner not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail update banner",
+                                    "error": "No query results for model [App\\\\Models\\\\Banner] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Banner"
+                ],
+                "summary": "Delete banner",
+                "description": "Delete a blog banner by ID",
+                "operationId": "delete_banner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the banner",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success delete banner"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "banner not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail delete banner",
+                                    "error": "No query results for model [App\\\\Models\\\\Banner] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contact-us": {
+            "get": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "ambil semua contact us",
+                "description": "Mengambil Data Semua contact us",
+                "operationId": "contact_us",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "success": true,
+                                    "message": "success get all contact_us",
+                                    "data": [
+                                        {
+                                            "id": 5,
+                                            "name": "ja3hyun okkk",
+                                            "email": "leepresent@tes.com",
+                                            "phone": "081231231",
+                                            "address": "qt",
+                                            "message": "watch it dabom okk",
+                                            "created_at": "2024-06-07T05:00:21.000000Z",
+                                            "updated_at": "2024-06-11T08:20:45.000000Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Create new contact us",
+                "description": "Create a new contact us",
+                "operationId": "create_contact_us",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "The name of contact us",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "The email of contact us",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "The phone of contact us",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "The address of contact us",
+                                        "type": "string"
+                                    },
+                                    "message": {
+                                        "description": "The messae of contact us",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success post contact us",
+                                    "data": {
+                                        "name": "tbzuyeon",
+                                        "email": "tbzuyeonie@tes.com",
+                                        "phone": "081231231",
+                                        "address": "lorem ipsumieeez",
+                                        "message": "watch it dabom",
+                                        "created_at": "2024-06-14T02:31:17.000000Z",
+                                        "updated_at": "2024-06-14T02:31:17.000000Z",
+                                        "id": 9
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail post contact us",
+                                    "error": "Validation error message"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/contact-us/{id}": {
+            "get": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Get single contact us",
+                "description": "Retrieve a single contact us by ID",
+                "operationId": "single_contact_us",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the contact us",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success get contact us",
+                                    "data": {
+                                        "id": 5,
+                                        "name": "ja3hyun okkk",
+                                        "email": "leepresent@tes.com",
+                                        "phone": "081231231",
+                                        "address": "qt",
+                                        "message": "watch it dabom okk",
+                                        "created_at": "2024-06-07T05:00:21.000000Z",
+                                        "updated_at": "2024-06-11T08:20:45.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "contact us not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail get contact us",
+                                    "error": "No query results for model [App\\\\Models\\\\contactUs] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Update contact us",
+                "description": "Update contact us by ID",
+                "operationId": "update_contact_us",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of contact us",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "description": {
+                                        "description": "The description of contact us",
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "description": "The image of contact us",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success update contact us",
+                                    "data": {
+                                        "id": 5,
+                                        "name": "ja3hyun okkk",
+                                        "email": "leepresent@tes.com",
+                                        "phone": "081231231",
+                                        "address": "qt",
+                                        "message": "watch it dabom okk",
+                                        "created_at": "2024-06-07T05:00:21.000000Z",
+                                        "updated_at": "2024-06-11T08:20:45.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "contact us not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail update contact us",
+                                    "error": "No query results for model [App\\\\Models\\\\contactUs] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Contact Us"
+                ],
+                "summary": "Delete contact us",
+                "description": "Delete contact us by ID",
+                "operationId": "delete_contact_us",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the contact us",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success delete contact us"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "contact us not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail delete contact us",
+                                    "error": "No query results for model [App\\\\Models\\\\contactUs] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/our-services": {
+            "get": {
+                "tags": [
+                    "Our Services"
+                ],
+                "summary": "ambil semua Our Services",
+                "description": "Mengambil Data Semua Our Services",
+                "operationId": "our_services",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "success": true,
+                                    "message": "success get all our_services",
+                                    "data": [
+                                        {
+                                            "id": 15,
+                                            "image": "1801550969236851.jpg",
+                                            "title": "ok",
+                                            "description": "Sip",
+                                            "created_at": "2024-06-10T02:36:13.000000Z",
+                                            "updated_at": "2024-06-11T08:01:32.000000Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Our Services"
+                ],
+                "summary": "Create new Our Services",
+                "description": "Create a new Our Services",
+                "operationId": "create_our_services",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image of Our Services",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "description": {
+                                        "description": "The description of Our Services",
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "description": "The title of Our Services",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success post Our Services",
+                                    "data": {
+                                        "id": 15,
+                                        "image": "1801550969236851.jpg",
+                                        "title": "ok",
+                                        "description": "Sip",
+                                        "created_at": "2024-06-10T02:36:13.000000Z",
+                                        "updated_at": "2024-06-11T08:01:32.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail post Our Services",
+                                    "error": "Validation error message"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/our-services/{id}": {
+            "get": {
+                "tags": [
+                    "Our Services"
+                ],
+                "summary": "Get single Our Services",
+                "description": "Retrieve a single Our Services by ID",
+                "operationId": "single_our_services",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the Our Services",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success get Our Services",
+                                    "data": {
+                                        "id": 15,
+                                        "image": "1801550969236851.jpg",
+                                        "title": "ok",
+                                        "description": "Sip",
+                                        "created_at": "2024-06-10T02:36:13.000000Z",
+                                        "updated_at": "2024-06-11T08:01:32.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Our Services not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail get Our Services",
+                                    "error": "No query results for model [App\\\\Models\\\\OurServices] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Our Services"
+                ],
+                "summary": "Update Our Services",
+                "description": "Update Our Services by ID",
+                "operationId": "update_our_services",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of Our Services",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image of Our Services",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "description": {
+                                        "description": "The description of Our Services",
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "description": "The title of Our Services",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success update Our Services",
+                                    "data": {
+                                        "id": 15,
+                                        "image": "1801550969236851.jpg",
+                                        "title": "ok",
+                                        "description": "Sip",
+                                        "created_at": "2024-06-10T02:36:13.000000Z",
+                                        "updated_at": "2024-06-11T08:01:32.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Our Services not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail update Our Services",
+                                    "error": "No query results for model [App\\\\Models\\\\OurServices] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/our-service/{id}": {
+            "delete": {
+                "tags": [
+                    "Our Services"
+                ],
+                "summary": "Delete Our Services",
+                "description": "Delete Our Services by ID",
+                "operationId": "delete_our_services",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the Our Services",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success delete Our Services"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Our Services not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail delete Our Services",
+                                    "error": "No query results for model [App\\\\Models\\\\OurServices] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/our-teams": {
+            "get": {
+                "tags": [
+                    "Our Team"
+                ],
+                "summary": "ambil semua Our Team",
+                "description": "Mengambil Data Semua Our Team",
+                "operationId": "our_teams",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "success": true,
+                                    "message": "success get all our_teams",
+                                    "data": [
+                                        {
+                                            "id": 8,
+                                            "image": "1801532517550099.png",
+                                            "name": "sip",
+                                            "description": "ok",
+                                            "created_at": "2024-06-11T03:08:13.000000Z",
+                                            "updated_at": "2024-06-11T03:08:13.000000Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Our Teams"
+                ],
+                "summary": "Create new Our Teams",
+                "description": "Create a new Our Teams",
+                "operationId": "create_our_teams",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image of Our Teams",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "description": {
+                                        "description": "The description of Our Teams",
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "description": "The name of Our Teams",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success post Our Teams",
+                                    "data": {
+                                        "image": "1801797620165543.jpg",
+                                        "name": "ok",
+                                        "description": "lorem ipsumwfsjdkjfkjsdkfjakdjfk",
+                                        "created_at": "2024-06-14T01:21:56.000000Z",
+                                        "updated_at": "2024-06-14T01:21:56.000000Z",
+                                        "id": 21
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail post Our Teams",
+                                    "error": "Validation error message"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/our-teams/{id}": {
+            "get": {
+                "tags": [
+                    "Our Teams"
+                ],
+                "summary": "Get single Our Teams",
+                "description": "Retrieve a single Our Teams by ID",
+                "operationId": "single_our_teams",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the Our Teams",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success get Our Teams",
+                                    "data": {
+                                        "id": 8,
+                                        "image": "1801532517550099.png",
+                                        "name": "sip",
+                                        "description": "ok",
+                                        "created_at": "2024-06-11T03:08:13.000000Z",
+                                        "updated_at": "2024-06-11T03:08:13.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Our Teams not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail get Our Teams",
+                                    "error": "No query results for model [App\\\\Models\\\\AboutUs] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Our Teams"
+                ],
+                "summary": "Update Our Teams",
+                "description": "Update Our Teams by ID",
+                "operationId": "update_our_teams",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of Our Teams",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image of Our Teams",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "description": {
+                                        "description": "The description of Our Teams",
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "description": "The name of Our Teams",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success update Our Teams",
+                                    "data": {
+                                        "id": 1,
+                                        "description": "Updated Our Teams",
+                                        "image": "updated_image_name.jpg",
+                                        "created_at": "2024-05-18 15:52:01",
+                                        "updated_at": "2024-05-18 15:52:01"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Our Teams not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail update Our Teams",
+                                    "error": "No query results for model [App\\\\Models\\\\AboutUs] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Our Teams"
+                ],
+                "summary": "Delete Our Teams",
+                "description": "Delete Our Teams by ID",
+                "operationId": "delete_our_teams",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the Our Teams",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success delete Our Teams"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Our Teams not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail delete Our Teams",
+                                    "error": "No query results for model [App\\\\Models\\\\AboutUs] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/social-media": {
+            "get": {
+                "tags": [
+                    "Social Media"
+                ],
+                "summary": "ambil semua Social Media",
+                "description": "Mengambil Data Semua Social Media",
+                "operationId": "social_media",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "success": true,
+                                    "message": "success get all social_media",
+                                    "data": [
+                                        {
+                                            "id": 15,
+                                            "image": "1801550969236851.jpg",
+                                            "name": "Sip",
+                                            "url": "Sip",
+                                            "created_at": "2024-06-10T02:36:13.000000Z",
+                                            "updated_at": "2024-06-11T08:01:32.000000Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Social Media"
+                ],
+                "summary": "Create new Social Media",
+                "description": "Create a new Social Media",
+                "operationId": "create_social_media",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image of Social Media",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "name": {
+                                        "description": "The name of Social Media",
+                                        "type": "string"
+                                    },
+                                    "url": {
+                                        "description": "The url of Social Media",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success post Social Media",
+                                    "data": {
+                                        "image": "1801550969236851.jpg",
+                                        "name": "Sip",
+                                        "url": "Sip",
+                                        "created_at": "2024-06-14T01:21:56.000000Z",
+                                        "updated_at": "2024-06-14T01:21:56.000000Z",
+                                        "id": 21
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail post Social Media",
+                                    "error": "Validation error message"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/social-media/{id}": {
+            "get": {
+                "tags": [
+                    "Social Media"
+                ],
+                "summary": "Get single Social Media",
+                "description": "Retrieve a single Social Media by ID",
+                "operationId": "single_social_media",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the Social Media",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success get Social Media",
+                                    "data": {
+                                        "id": 15,
+                                        "image": "1801733198090700.jpg",
+                                        "name": "Sip",
+                                        "url": "Sip",
+                                        "created_at": "2024-06-10T02:36:13.000000Z",
+                                        "updated_at": "2024-06-13T08:17:59.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Social Media not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail get Social Media",
+                                    "error": "No query results for model [App\\\\Models\\\\SocialMedia] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Social Media"
+                ],
+                "summary": "Update Social Media",
+                "description": "Update Social Media by ID",
+                "operationId": "update_social_media",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of Social Media",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image of Social Media",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "name": {
+                                        "description": "The name of Social Media",
+                                        "type": "string"
+                                    },
+                                    "url": {
+                                        "description": "The url of Social Media",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success update Social Media",
+                                    "data": {
+                                        "id": 1,
+                                        "name": "Twitter",
+                                        "url": "www.twitter.com",
+                                        "image": "updated_image_name.jpg",
+                                        "created_at": "2024-05-18 15:52:01",
+                                        "updated_at": "2024-05-18 15:52:01"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Social Media not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail update Social Media",
+                                    "error": "No query results for model [App\\\\Models\\\\SocialMedia] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Social Media"
+                ],
+                "summary": "Delete Social Media",
+                "description": "Delete Social Media by ID",
+                "operationId": "delete_social_media",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the Social Media",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success delete Social Media"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Social Media not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail delete Social Media",
+                                    "error": "No query results for model [App\\\\Models\\\\SocialMedia] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/testimony": {
+            "get": {
+                "tags": [
+                    "Testimony"
+                ],
+                "summary": "ambil semua Testimony",
+                "description": "Mengambil Data Semua Testimony",
+                "operationId": "testimony",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "success": true,
+                                    "message": "success get all testimony",
+                                    "data": [
+                                        {
+                                            "id": 15,
+                                            "image": "1801550969236851.jpg",
+                                            "name": "sip ok",
+                                            "business_name": "ABC",
+                                            "description": "Sip",
+                                            "created_at": "2024-06-10T02:36:13.000000Z",
+                                            "updated_at": "2024-06-11T08:01:32.000000Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Testimony"
+                ],
+                "summary": "Create new Testimony",
+                "description": "Create a new Testimony",
+                "operationId": "create_testimony",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image of Testimony",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "description": {
+                                        "description": "The description of Testimony",
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "description": "The name of Testimony",
+                                        "type": "string"
+                                    },
+                                    "business_name": {
+                                        "description": "The business_name of Testimony",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success post Testimony",
+                                    "data": {
+                                        "image": "1801797620165543.jpg",
+                                        "description": "lorem ipsumwfsjdkjfkjsdkfjakdjfk",
+                                        "name": "sip ok",
+                                        "business_name": "ABC",
+                                        "created_at": "2024-06-14T01:21:56.000000Z",
+                                        "updated_at": "2024-06-14T01:21:56.000000Z",
+                                        "id": 21
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail post Testimony",
+                                    "error": "Validation error message"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/testimony/{id}": {
+            "get": {
+                "tags": [
+                    "Testimony"
+                ],
+                "summary": "Get single Testimony",
+                "description": "Retrieve a single Testimony by ID",
+                "operationId": "single_testimony",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the Testimony",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success get Testimony",
+                                    "data": {
+                                        "id": 15,
+                                        "image": "1801733198090700.jpg",
+                                        "description": "ok",
+                                        "name": "sip ok",
+                                        "business_name": "ABC",
+                                        "created_at": "2024-06-10T02:36:13.000000Z",
+                                        "updated_at": "2024-06-13T08:17:59.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Testimony not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail get Testimony",
+                                    "error": "No query results for model [App\\\\Models\\\\Testimony] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Testimony"
+                ],
+                "summary": "Update Testimony",
+                "description": "Update Testimony by ID",
+                "operationId": "update_testimony",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of Testimony",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "The image of Testimony",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "description": {
+                                        "description": "The description of Testimony",
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "description": "The name of Testimony",
+                                        "type": "string"
+                                    },
+                                    "business_name": {
+                                        "description": "The business_name of Testimony",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success update Testimony",
+                                    "data": {
+                                        "id": 1,
+                                        "description": "Updated Testimony",
+                                        "image": "updated_image_name.jpg",
+                                        "created_at": "2024-05-18 15:52:01",
+                                        "updated_at": "2024-05-18 15:52:01"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Testimony not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail update Testimony",
+                                    "error": "No query results for model [App\\\\Models\\\\Testimony] 10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Testimony"
+                ],
+                "summary": "Delete Testimony",
+                "description": "Delete Testimony by ID",
+                "operationId": "delete_testimony",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the Testimony",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": true,
+                                    "message": "success delete Testimony"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Testimony not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status": false,
+                                    "message": "fail delete Testimony",
+                                    "error": "No query results for model [App\\\\Models\\\\Testimony] 10"
                                 }
                             }
                         }
