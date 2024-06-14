@@ -17,7 +17,7 @@ namespace App\Http\Controllers;
     * )
     *
     * @OA\Server(
-    *      url="http://localhost:8000/api",
+    *      url="https://collab-be-production-abcd.up.railway.app/api",
     *      description="Demo API Server"
     * )
     * @OA\SecurityScheme(
