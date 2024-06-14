@@ -9,6 +9,50 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    /**
+ * @OA\Post(
+ *     path="/login",
+ *     tags={"Login"},
+ *     operationId="login",
+ *     summary="User login",
+ *     description="Authenticate user and return a token",
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"email","password"},
+ *             @OA\Property(property="email", type="string", format="email", example="xjohnson@example.org"),
+ *             @OA\Property(property="password", type="string", format="password", example="password")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response="200",
+ *         description="Successful login",
+ *         @OA\JsonContent(
+ *             example={
+ *                 "token": "example_token_string",
+ *                 "user": {
+ *                     "id": "1",
+ *                     "name": "Grace",
+ *                     "email": "tes@gmail.com",
+ *                      "email_verified_at": "timestamp",
+ *                      "created_at": "timestamp",
+ *                      "updated_at": "timestamp"
+ *                 }
+ * 
+ *             }
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response="422",
+ *         description="Invalid email or password",
+ *         @OA\JsonContent(
+ *             example={
+ *                 "message": "Invalid email or password"
+ *             }
+ *         )
+ *     )
+ * )
+ */
     public function login(UserRequest $request)
     {
         $validated = $request->validated();

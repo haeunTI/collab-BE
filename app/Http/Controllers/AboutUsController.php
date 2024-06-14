@@ -12,9 +12,35 @@ use Intervention\Image\ImageManager;
 
 class AboutUsController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
-     */
+    *    @OA\Get(
+    *       path="/about-us",
+    *       tags={"About Us"},
+    *       operationId="about_us",
+    *       summary="ambil semua about us",
+    *       security={{"bearerAuth":{}}},
+    *       description="Mengambil Data Semua about us",
+    *       @OA\Response(
+    *           response="200",
+    *           description="Ok",
+    *           @OA\JsonContent
+    *           (example={
+    *               "success": true,
+    *               "message": "success get all about_us",
+    *               "data": {
+    *                   {
+    *                   "id": 15,
+                    *  "image": "1801550969236851.jpg",
+                    *  "description": "Sip",
+                    *  "created_at": "2024-06-10T02:36:13.000000Z",
+                    *  "updated_at": "2024-06-11T08:01:32.000000Z"
+    *                  }
+    *              }
+    *          }),
+    *      ),
+    *  )
+    */
 
     public function index()
     {
@@ -35,9 +61,62 @@ class AboutUsController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+       /**
+        *    @OA\Post(
+        *       path="/about-us",
+        *       tags={"About Us"},
+        *       operationId="create_about_us",
+        *       summary="Create new about us",
+        *       security={{"bearerAuth":{}}},
+        *       description="Create a new about us",
+        *       @OA\RequestBody(
+        *           required=true,
+        *           @OA\MediaType(
+        *               mediaType="multipart/form-data",
+        *               @OA\Schema(
+        *                   @OA\Property(
+        *                       property="image",
+        *                       type="string",
+        *                       description="The image of about us"
+        *                   ),
+        *                   @OA\Property(
+        *                       property="description",
+        *                       type="string",
+        *                       description="The description of about us"
+        *                   )
+        *               )
+        *           )
+        *       ),
+        *       @OA\Response(
+        *           response="200",
+        *           description="Successful response",
+        *           @OA\JsonContent(
+        *               example={
+        *                   "status": true,
+        *                   "message": "success post about us",
+        *                   "data": {
+        *                        "image": "1801797620165543.jpg",
+        *                        "description": "lorem ipsumwfsjdkjfkjsdkfjakdjfk",
+        *                        "created_at": "2024-06-14T01:21:56.000000Z",
+        *                        "updated_at": "2024-06-14T01:21:56.000000Z",
+        *                        "id": 21
+        *                   }
+        *               }
+        *           )
+        *       ),
+        *       @OA\Response(
+        *           response="400",
+        *           description="Bad request",
+        *           @OA\JsonContent(
+        *               example={
+        *                   "status": false,
+        *                   "message": "fail post about us",
+        *                   "error": "Validation error message"
+        *               }
+        *           )
+        *       )
+        *    )
+        */
     public function store(StoreAboutUsRequest $req)
     {
         try{
@@ -77,6 +156,50 @@ class AboutUsController extends Controller
     /**
      * Display the specified resource.
      */
+    /**
+    *    @OA\Get(
+    *       path="/about-us/{id}",
+    *       tags={"About Us"},
+    *       operationId="single_about_us",
+    *       summary="Get single about us",
+    *       security={{"bearerAuth":{}}},
+    *       description="Retrieve a single about us by ID",
+    *       @OA\Parameter(
+    *           name="id",
+    *           in="path",
+    *           required=true,
+    *           @OA\Schema(type="integer"),
+    *           description="The ID of the about us"
+    *       ),
+    *       @OA\Response(
+    *           response="200",
+    *           description="Successful response",
+    *           @OA\JsonContent(
+    *               example={
+    *                   "status": true,
+    *                   "message": "success get blog",
+    *                   "data": {
+    *                       "id": 15,
+    *                           "image": "1801733198090700.jpg",
+    *                           "description": "ok",
+    *                           "created_at": "2024-06-10T02:36:13.000000Z",
+    *                           "updated_at": "2024-06-13T08:17:59.000000Z"    *                   }
+    *               }
+    *           )
+    *       ),
+    *       @OA\Response(
+    *           response="404",
+    *           description="about us not found",
+    *           @OA\JsonContent(
+    *               example={
+    *                   "status": false,
+    *                   "message": "fail get about us",
+    *                   "error": "No query results for model [App\\Models\\AboutUs] 10"
+    *               }
+    *           )
+    *       )
+    *    )
+    */
     public function show($id)
     {
         try{
@@ -97,7 +220,73 @@ class AboutUsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+    * Update the specified resource in storage.
+    */
+
+    /**
+     *    @OA\Post(
+     *       path="/about-us/{id}",
+     *       tags={"About Us"},
+     *       operationId="updateBlog",
+     *       summary="Update about us",
+     *       security={{"bearerAuth":{}}},
+     *       description="Update about us by ID",
+     *       @OA\Parameter(
+     *           name="id",
+     *           in="path",
+     *           required=true,
+     *           @OA\Schema(type="integer"),
+     *           description="The ID of about us"
+     *       ),
+     *       @OA\RequestBody(
+     *           required=true,
+     *           @OA\MediaType(
+     *               mediaType="multipart/form-data",
+     *               @OA\Schema(
+     *                   @OA\Property(
+     *                       property="description",
+     *                       type="string",
+     *                       description="The description of about us"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="image",
+     *                       type="string",
+     *                       format="binary",
+     *                       description="The image of about us"
+     *                   )
+     *               )
+     *           )
+     *       ),
+     *       @OA\Response(
+     *           response="200",
+     *           description="Successful response",
+     *           @OA\JsonContent(
+     *               example={
+     *                   "status": true,
+     *                   "message": "success update about us",
+     *                   "data": {
+     *                       "id": 1,
+     *                       "title": "Updated About Us",
+     *                       "cover": "updated_image_name.jpg",
+     *                       "content": "Updated about us content here",
+     *                       "created_at": "2024-05-18 15:52:01",
+     *                       "updated_at": "2024-05-18 15:52:01"
+     *                   }
+     *               }
+     *           )
+     *       ),
+     *       @OA\Response(
+     *           response="404",
+     *           description="About us not found",
+     *           @OA\JsonContent(
+     *               example={
+     *                   "status": false,
+     *                   "message": "fail update about us",
+     *                   "error": "No query results for model [App\\Models\\AboutUs] 10"
+     *               }
+     *           )
+     *       )
+     *    )
      */
     public function update(UpdateAboutUsRequest $req, $id)
     {
@@ -140,6 +329,45 @@ class AboutUsController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     */
+
+     /**
+     *    @OA\Delete(
+     *       path="/about-us/{id}",
+     *       tags={"About Us"},
+     *       operationId="delete_about_us",
+     *       summary="Delete about us",
+     *       security={{"bearerAuth":{}}},
+     *       description="Delete a blog about us by ID",
+     *       @OA\Parameter(
+     *           name="id",
+     *           in="path",
+     *           required=true,
+     *           @OA\Schema(type="integer"),
+     *           description="The ID of the about us"
+     *       ),
+     *       @OA\Response(
+     *           response="200",
+     *           description="Successful response",
+     *           @OA\JsonContent(
+     *               example={
+     *                   "status": true,
+     *                   "message": "success delete about us"
+     *               }
+     *           )
+     *       ),
+     *       @OA\Response(
+     *           response="404",
+     *           description="About us not found",
+     *           @OA\JsonContent(
+     *               example={
+     *                   "status": false,
+     *                   "message": "fail delete about us",
+     *                   "error": "No query results for model [App\\Models\\AboutUs] 10"
+     *               }
+     *           )
+     *       )
+     *    )
      */
     public function destroy($id)
     {
