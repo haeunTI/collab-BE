@@ -7,6 +7,7 @@ use App\Http\Requests\StoreAboutUsRequest;
 use App\Http\Requests\UpdateAboutUsRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
@@ -47,6 +48,19 @@ class AboutUsController extends Controller
         try{
             $aboutUs = AboutUs::all(); 
  
+            foreach ($aboutUs as $item) {
+                if ($item->image) {
+                    try {
+                        $item->image_url = GoogleDriveController::getImageUrl($item->image);
+                    } catch (\Exception $e) {
+                        $item->image_url = null; // Set image_url to null if fetching fails
+                        Log::error('Failed to fetch image URL for AboutUs ID ' . $item->id, ['error' => $e->getMessage()]);
+                    }
+                } else {
+                    $item->image_url = null; // Set image_url to null if image is not set
+                }
+            }
+    
             return response([
                 "status" => true,
                 "message" => "success get all about us",

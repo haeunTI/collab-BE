@@ -23,6 +23,8 @@ class GoogleDriveController
 
     }
 
+
+
     public static function checkAndCreateFolder($folderName) {
         try {
             $accessToken = self::getAccessToken();
@@ -136,6 +138,36 @@ class GoogleDriveController
             throw new \Exception("Failed to fetch file ID from Google Drive: " . $fileIdResponse->body());
         }
     }
+
+
+    public static function getImageUrl($imageName)
+    {
+        try {
+            $accessToken = self::getAccessToken();
+
+            $fileIdResponse = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $accessToken,
+            ])->get('https://www.googleapis.com/drive/v3/files', [
+                'q' => "name='$imageName' and trashed=false",
+                'fields' => 'files(id, webViewLink)',
+            ]);
+
+            if ($fileIdResponse->successful()) {
+                $files = json_decode($fileIdResponse->body(), true)['files'];
+                if (!empty($files)) {
+                    return $files[0]['webViewLink'];
+                } else {
+                    throw new \Exception("File not found on Google Drive: $imageName");
+                }
+            } else {
+                throw new \Exception("Failed to fetch file ID from Google Drive: " . $fileIdResponse->body());
+            }
+        } catch (\Throwable $th) {
+            Log::error('Exception in getImageUrl', ['error' => $th->getMessage()]);
+            throw $th;
+        }
+    }
+
 }
 
 ?>
