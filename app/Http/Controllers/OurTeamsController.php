@@ -7,6 +7,7 @@ use App\Http\Requests\StoreOurTeamsRequest;
 use App\Http\Requests\UpdateOurTeamsRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class OurTeamsController extends Controller
 {
@@ -44,6 +45,18 @@ class OurTeamsController extends Controller
     {
         try{
             $ourTeams = OurTeams::all(); 
+            foreach ($ourTeams as $item) {
+                if ($item->image) {
+                    try {
+                        $item->image_url = GoogleDriveController::getImageUrl($item->image);
+                    } catch (\Exception $e) {
+                        $item->image_url = null; 
+                        Log::error('Failed to fetch image URL for Our Teams ID ' . $item->id, ['error' => $e->getMessage()]);
+                    }
+                } else {
+                    $item->image_url = null; 
+                }
+            }
  
             return response([
                 "status" => true,

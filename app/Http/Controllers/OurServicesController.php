@@ -45,6 +45,19 @@ class OurServicesController extends Controller
     {
         try{
             $ourServices = OurServices::all(); 
+
+            foreach ($ourServices as $item) {
+                if ($item->image) {
+                    try {
+                        $item->image_url = GoogleDriveController::getImageUrl($item->image);
+                    } catch (\Exception $e) {
+                        $item->image_url = null; 
+                        Log::error('Failed to fetch image URL for Our Services ID ' . $item->id, ['error' => $e->getMessage()]);
+                    }
+                } else {
+                    $item->image_url = null; 
+                }
+            }
  
             return response([
                 "status" => true,

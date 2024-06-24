@@ -7,6 +7,7 @@ use App\Http\Requests\StoreSocialMediaRequest;
 use App\Http\Requests\UpdateSocialMediaRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
@@ -46,6 +47,18 @@ class SocialMediaController extends Controller
     {
         try{
             $socialMedia = SocialMedia::all(); 
+            foreach ($socialMedia as $item) {
+                if ($item->image) {
+                    try {
+                        $item->image_url = GoogleDriveController::getImageUrl($item->image);
+                    } catch (\Exception $e) {
+                        $item->image_url = null; 
+                        Log::error('Failed to fetch image URL for Social Media ID ' . $item->id, ['error' => $e->getMessage()]);
+                    }
+                } else {
+                    $item->image_url = null; 
+                }
+            }
  
             return response([
                 "status" => true,

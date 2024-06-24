@@ -53,14 +53,13 @@ class AboutUsController extends Controller
                     try {
                         $item->image_url = GoogleDriveController::getImageUrl($item->image);
                     } catch (\Exception $e) {
-                        $item->image_url = null; // Set image_url to null if fetching fails
+                        $item->image_url = null;
                         Log::error('Failed to fetch image URL for AboutUs ID ' . $item->id, ['error' => $e->getMessage()]);
                     }
                 } else {
-                    $item->image_url = null; // Set image_url to null if image is not set
+                    $item->image_url = null; 
                 }
             }
-    
             return response([
                 "status" => true,
                 "message" => "success get all about us",
@@ -216,7 +215,18 @@ class AboutUsController extends Controller
     {
         try{
             $aboutUs = AboutUs::findOrFail($id); 
- 
+
+            if ($aboutUs->image) {
+                try {
+                    $aboutUs->image_url = GoogleDriveController::getImageUrl($aboutUs->image);
+                } catch (\Exception $e) {
+                    $aboutUs->image_url = null; // Set image_url to null if fetching fails
+                    Log::error('Failed to fetch image URL for AboutUs ID ' . $aboutUs->id, ['error' => $e->getMessage()]);
+                }
+            } else {
+                $aboutUs->image_url = null; // Set image_url to null if image is not set
+            }
+     
             return response([
                 "status" => true,
                 "message" => "success get single about us",

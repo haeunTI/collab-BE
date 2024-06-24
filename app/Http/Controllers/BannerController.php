@@ -7,6 +7,7 @@ use App\Http\Requests\StoreBannerRequest;
 use App\Http\Requests\UpdateBannerRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class BannerController extends Controller
 {
@@ -43,7 +44,18 @@ class BannerController extends Controller
     {
         try{
             $banner = Banner::all(); 
- 
+            foreach ($banner as $item) {
+                if ($item->image) {
+                    try {
+                        $item->image_url = GoogleDriveController::getImageUrl($item->image);
+                    } catch (\Exception $e) {
+                        $item->image_url = null; 
+                        Log::error('Failed to fetch image URL for Banner ID ' . $item->id, ['error' => $e->getMessage()]);
+                    }
+                } else {
+                    $item->image_url = null; 
+                }
+            }
             return response([
                 "status" => true,
                 "message" => "success get all banner",
