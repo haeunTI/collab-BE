@@ -224,6 +224,17 @@ class OurServicesController extends Controller
     {
         try{
             $ourServices = OurServices::findOrFail($id); 
+
+            if ($ourServices->image) {
+                try {
+                    $ourServices->image_url = GoogleDriveController::getImageUrl($ourServices->image);
+                } catch (\Exception $e) {
+                    $ourServices->image_url = null; // Set image_url to null if fetching fails
+                    Log::error('Failed to fetch image URL for ourS$ourServices ID ' . $ourServices->id, ['error' => $e->getMessage()]);
+                }
+            } else {
+                $ourServices->image_url = null; // Set image_url to null if image is not set
+            }
  
             return response([
                 "status" => true,

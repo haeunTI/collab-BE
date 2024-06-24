@@ -209,6 +209,17 @@ class BannerController extends Controller
     {
         try{
             $banner = Banner::findOrFail($id); 
+
+            if ($banner->image) {
+                try {
+                    $banner->image_url = GoogleDriveController::getImageUrl($banner->image);
+                } catch (\Exception $e) {
+                    $banner->image_url = null; // Set image_url to null if fetching fails
+                    Log::error('Failed to fetch image URL for ba$banner ID ' . $banner->id, ['error' => $e->getMessage()]);
+                }
+            } else {
+                $banner->image_url = null; // Set image_url to null if image is not set
+            }
  
             return response([
                 "status" => true,

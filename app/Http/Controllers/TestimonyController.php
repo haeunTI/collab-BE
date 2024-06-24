@@ -229,6 +229,17 @@ class TestimonyController extends Controller
     {
         try{
             $testimony = Testimony::findOrFail($id); 
+
+            if ($testimony->image) {
+                try {
+                    $testimony->image_url = GoogleDriveController::getImageUrl($testimony->image);
+                } catch (\Exception $e) {
+                    $testimony->image_url = null; // Set image_url to null if fetching fails
+                    Log::error('Failed to fetch image URL for $testimony ID ' . $testimony->id, ['error' => $e->getMessage()]);
+                }
+            } else {
+                $testimony->image_url = null; // Set image_url to null if image is not set
+            }
  
             return response([
                 "status" => true,

@@ -221,6 +221,17 @@ class SocialMediaController extends Controller
     {
         try{
             $socialMedia = SocialMedia::findOrFail($id); 
+
+            if ($socialMedia->image) {
+                try {
+                    $socialMedia->image_url = GoogleDriveController::getImageUrl($socialMedia->image);
+                } catch (\Exception $e) {
+                    $socialMedia->image_url = null; // Set image_url to null if fetching fails
+                    Log::error('Failed to fetch image URL for social$socialMedia ID ' . $socialMedia->id, ['error' => $e->getMessage()]);
+                }
+            } else {
+                $socialMedia->image_url = null; // Set image_url to null if image is not set
+            }
  
             return response([
                 "status" => true,

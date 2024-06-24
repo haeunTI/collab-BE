@@ -220,6 +220,17 @@ class OurTeamsController extends Controller
     {
         try{
             $ourTeams = OurTeams::findOrFail($id); 
+
+            if ($ourTeams->image) {
+                try {
+                    $ourTeams->image_url = GoogleDriveController::getImageUrl($ourTeams->image);
+                } catch (\Exception $e) {
+                    $ourTeams->image_url = null; // Set image_url to null if fetching fails
+                    Log::error('Failed to fetch image URL for ourT$ourTeams ID ' . $ourTeams->id, ['error' => $e->getMessage()]);
+                }
+            } else {
+                $ourTeams->image_url = null; // Set image_url to null if image is not set
+            }
  
             return response([
                 "status" => true,
